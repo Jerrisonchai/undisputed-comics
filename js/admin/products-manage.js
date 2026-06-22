@@ -228,8 +228,11 @@ const AdminProducts = {
               </div>
               <div class="form-group">
                 <label class="form-group__label" for="prod-cover">封面图片 URL</label>
-                <input class="form-group__input" type="text" id="prod-cover"
-                       value="${isEdit ? this._esc(product.cover_image || '') : ''}" placeholder="https://…">
+                <div style="display:flex;gap:8px;">
+                  <input class="form-group__input" type="text" id="prod-cover"
+                         value="${isEdit ? this._esc(product.cover_image || '') : ''}" placeholder="https://…" style="flex:1;">
+                  <button type="button" class="btn btn--secondary btn--sm" id="btn-pick-media">🖼️ 选择</button>
+                </div>
               </div>
             </div>
 
@@ -275,6 +278,11 @@ const AdminProducts = {
     // Save
     document.getElementById('btn-save-product').addEventListener('click', async () => {
       await this._save(isEdit ? product.id : null);
+    });
+
+    // Pick from media library
+    document.getElementById('btn-pick-media')?.addEventListener('click', () => {
+      this._openMediaPicker();
     });
   },
 
@@ -372,6 +380,78 @@ const AdminProducts = {
     } catch (err) {
       AdminAuth.toast('操作失败', 'error');
     }
+  },
+
+  /**
+   * Open media picker modal to browse uploaded images
+   */
+  async _openMediaPicker() {
+    const sb = AdminAuth._getClient();
+    const config = typeof Config !== 'undefined' ? Config : { SUPABASE_URL: 'https://fdusyudelkhoomakdfel.supabase.co' };
+    const bucket = 'media';
+    let files = [];
+
+    // Fetch files from Supabase Storage
+    try {
+      const { data } = await sb.storage.from(bucket).list('', {
+        sortBy: { column: 'created_at', order: 'desc' },
+      });
+      files = (data || []).filter(f => !f.name.startsWith('.'));
+    } catch {}
+
+    const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp', '.avif'];
+    const isImage = (name) => imageExts.some(ext => name.toLowerCase().endsWith(ext));
+
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+      <div class="modal" style="max-width:720px;">
+        <div class="modal__header">
+          <h3 class="modal__title">🖼️ 选择封面图片</h3>
+          <button class="modal__close" onclick="this.closest('.modal-overlay').remove()">✕</button>
+        </div>
+        <div class="modal__body">
+          ${files.length === 0 ? `
+            <div class="empty-state">
+              <div class="empty-state__icon">📭</div>
+              <div class="empty-state__text">媒体库为空。请先在「媒体库」页面上传图片。</div>
+            </div>
+          ` : `
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;">
+              ${files.filter(f => isImage(f.name)).map(f => {
+                const url = ${JSON.stringify(config.SUPABASE_URL)} + '/storage/v1/object/public/' + bucket + '/' + f.name;
+                return `
+                  <div class="media-pick-card" data-url="${url}" style="cursor:pointer;border:2px solid transparent;border-radius:10px;overflow:hidden;transition:all 0.2s;background:#f7fafc;" onmouseenter="this.style.borderColor='var(--admin-sidebar-active)'" onmouseleave="this.style.borderColor='transparent'">
+                    <div style="aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+                      <img src="${url}" alt="${this._esc(f.name)}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
+                    </div>
+                    <div style="padding:6px;font-size:11px;color:#718096;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${this._esc(f.name)}">${this._esc(f.name)}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          `}
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.remove();
+    });
+
+    // Click to select
+    modal.querySelectorAll('.media-pick-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const coverInput = document.getElementById('prod-cover');
+        if (coverInput) {
+          coverInput.value = card.dataset.url;
+          AdminAuth.toast('✅ 封面 URL 已填入', 'success');
+        }
+        modal.remove();
+      });
+    });
   },
 
   _esc(str) {

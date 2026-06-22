@@ -308,3 +308,25 @@ create index if not exists idx_order_items_order on order_items(order_id);
 create index if not exists idx_ratings_product on ratings(product_id);
 create index if not exists idx_ratings_user on ratings(user_id);
 create index if not exists idx_favorites_user on favorites(user_id);
+
+-- ============================================================
+-- STORAGE: Create Media Bucket
+-- ============================================================
+-- Note: Create the bucket manually first in Supabase Dashboard:
+--   Storage → New Bucket → Name: "media" → Public bucket: ON → File size limit: 5MB
+--   Then run the policies below:
+
+-- Create or update bucket via SQL
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('media', 'media', true, 5242880, '{image/jpeg,image/png,image/gif,image/webp,image/svg+xml,image/avif}')
+on conflict (id) do update set public = true;
+
+-- Storage policies
+create policy "Admins can upload media" on storage.objects
+  for insert with check (bucket_id = 'media' and is_admin());
+
+create policy "Admins can delete media" on storage.objects
+  for delete using (bucket_id = 'media' and is_admin());
+
+create policy "Media is publicly viewable" on storage.objects
+  for select using (bucket_id = 'media');

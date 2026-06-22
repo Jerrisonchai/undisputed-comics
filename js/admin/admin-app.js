@@ -137,6 +137,7 @@ const AdminRouter = {
       dashboard: '控制台',
       products: '商品管理',
       orders: '订单管理',
+      media: '媒体库',
       settings: '设置',
     };
     const titleEl = document.getElementById('admin-page-title');
@@ -152,6 +153,9 @@ const AdminRouter = {
         break;
       case 'orders':
         AdminOrders.render();
+        break;
+      case 'media':
+        AdminMedia.render();
         break;
       case 'settings':
         AdminSettings.render();
