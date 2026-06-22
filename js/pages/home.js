@@ -128,6 +128,7 @@ const PageHome = {
           <h3 class="featured-card__title">${Utils.escapeHTML(product.title_zh)}</h3>
           <span class="featured-card__publisher">${Utils.escapeHTML(pubName)}</span>
           <span class="featured-card__price">${Utils.formatPrice(product.price)}</span>
+          ${this._renderCardRating(product.id)}
           <p class="featured-card__desc">${Utils.escapeHTML(product.description_zh || '')}</p>
           <div class="featured-card__actions">
             <span class="badge ${badge.class}">${badge.text}</span>
@@ -188,12 +189,26 @@ const PageHome = {
         </div>
         <h3 class="product-card__title">${Utils.escapeHTML(product.title_zh)}</h3>
         <p class="product-card__publisher">${Utils.escapeHTML(pubName)}</p>
+        ${this._renderCardRating(product.id)}
         <span class="product-card__price">
           ${Utils.formatPrice(product.price)}
           ${product.original_price ? `<span class="original">${Utils.formatPrice(product.original_price)}</span>` : ''}
         </span>
       </div>
     </div>`;
+  },
+
+  /**
+   * Render small star rating for a product card
+   */
+  _renderCardRating(productId) {
+    const { average, count } = RatingsModule.getAverage(productId);
+    if (!count) return '';
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(i <= Math.round(average) ? '★' : '☆');
+    }
+    return `<div class="product-card__rating"><span class="card-stars">${stars.join('')}</span><span class="card-rating-count">${average}</span></div>`;
   },
 
   /* ═══════════ PUBLISHERS ═══════════ */

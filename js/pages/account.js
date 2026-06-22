@@ -316,10 +316,11 @@ const PageAccount = {
     const catName = catMap[product.category_id] || '';
 
     return `
-    <div class="product-card" data-product-id="${product.id}">
+    <div class="product-card" data-product-id="${product.id}" style="position:relative;">
       <div class="product-card__image--placeholder">${catName.charAt(0) || '📚'}</div>
       <div class="product-card__body">
         <div class="product-card__title">${Utils.escapeHTML(product.title_zh)}</div>
+        ${this._renderCardRating(product.id)}
         <div class="product-card__price">RM ${product.price.toFixed(2)}</div>
         <button class="btn-fav-remove" data-product-id="${product.id}"
                 style="position:absolute;top:4px;right:4px;background:none;border:none;font-size:18px;cursor:pointer;padding:4px;">
@@ -327,5 +328,18 @@ const PageAccount = {
         </button>
       </div>
     </div>`;
+  },
+
+  /**
+   * Render small star rating for a product card
+   */
+  _renderCardRating(productId) {
+    const { average, count } = RatingsModule.getAverage(productId);
+    if (!count) return '';
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(i <= Math.round(average) ? '★' : '☆');
+    }
+    return `<div class="product-card__rating"><span class="card-stars">${stars.join('')}</span><span class="card-rating-count">${average}</span></div>`;
   },
 };

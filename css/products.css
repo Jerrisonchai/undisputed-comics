@@ -112,6 +112,31 @@
   width: 100%;
 }
 
+/* ═══════ Card Star Rating ═══════ */
+.product-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.card-stars {
+  font-size: 13px;
+  color: #F6E05E;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.card-rating-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .card-stars {
+  color: #F6E05E;
+}
+
 /* ============================================================
    PUBLISHER PAGE
    ============================================================ */

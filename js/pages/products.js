@@ -221,6 +221,7 @@ const PageProducts = {
     const catName = this._getCategoryName(product.category_id);
     const pubName = this._getPublisherName(product.publisher);
     const hasOriginal = product.original_price && product.original_price > product.price;
+    const ratingHTML = this._renderCardRating(product.id);
 
     return `
     <div class="product-card" data-product-id="${product.id}">
@@ -234,12 +235,26 @@ const PageProducts = {
         </div>
         <div class="product-card__title">${Utils.escapeHTML(product.title_zh)}</div>
         <div class="product-card__publisher">${Utils.escapeHTML(pubName)}</div>
+        ${ratingHTML}
         <div class="product-card__price">
           RM ${product.price.toFixed(2)}
           ${hasOriginal ? `<span class="original">RM ${product.original_price.toFixed(2)}</span>` : ''}
         </div>
       </div>
     </div>`;
+  },
+
+  /**
+   * Render small star rating for a product card
+   */
+  _renderCardRating(productId) {
+    const { average, count } = RatingsModule.getAverage(productId);
+    if (!count) return '';
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(i <= Math.round(average) ? '★' : '☆');
+    }
+    return `<div class="product-card__rating"><span class="card-stars">${stars.join('')}</span><span class="card-rating-count">${average}</span></div>`;
   },
 
   _getStockBadge(product) {
