@@ -89,7 +89,7 @@ const AppRouter = {
     Nav.setActive(route);
 
     // Show/hide bottom nav (hide on product detail, checkout, login)
-    const hideNavOn = ['checkout', 'login', 'register', 'product'];
+    const hideNavOn = ['checkout', 'login', 'register', 'product', 'about', 'delivery', 'contact', 'faq'];
     Nav.toggleBottomNav(!hideNavOn.includes(route));
 
     // Render the appropriate page
@@ -158,9 +158,32 @@ const AppRouter = {
         PageAccount.bindEvents();
         break;
 
+      case 'about':
+        await PageAbout.init();
+        PageAbout.bindEvents();
+        break;
+
+      case 'delivery':
+        await PageDelivery.init();
+        PageDelivery.bindEvents();
+        break;
+
+      case 'contact':
+        await PageContact.init();
+        PageContact.bindEvents();
+        break;
+
+      case 'faq':
+        await PageFAQ.init();
+        PageFAQ.bindEvents();
+        break;
+
       default:
         main.innerHTML = this._placeholderPage('📭', '页面未找到', '请检查网址是否正确');
     }
+
+    // Update SEO metadata
+    this._updateSEO(route, params);
   },
 
   /**
@@ -178,6 +201,55 @@ const AppRouter = {
         ← 返回首页
       </button>
     </div>`;
+  },
+
+  /**
+   * Update SEO metadata per page
+   */
+  _updateSEO(route, params) {
+    const titles = {
+      home: '金牌漫画 · 品质漫画，金牌之选',
+      products: '全部漫画 · 金牌漫画',
+      product: '商品详情 · 金牌漫画',
+      cart: '购物车 · 金牌漫画',
+      checkout: '结算 · 金牌漫画',
+      login: '登录 · 金牌漫画',
+      register: '注册 · 金牌漫画',
+      account: '我的账户 · 金牌漫画',
+      search: '搜索 · 金牌漫画',
+      about: '关于我们 · 金牌漫画',
+      delivery: '配送说明 · 金牌漫画',
+      contact: '联系我们 · 金牌漫画',
+      faq: '常见问题 · 金牌漫画',
+    };
+
+    const descriptions = {
+      home: '品质漫画，金牌之选。正版中文漫画在线书店，全马配送。',
+      products: '浏览全部正版中文漫画。海贼王、咒术迴战、鬼灭之刃等热门漫画在线购买。',
+      product: '正版中文漫画详情。查看价格、库存、评价，立即下单。',
+      cart: '查看购物车，准备好结算您的漫画订单。',
+      checkout: '填写收货信息，完成订单。全马配送，满RM150免运费。',
+      login: '登录金牌漫画账户，查看订单历史和收藏清单。',
+      register: '注册金牌漫画账户，享受收藏、评价和会员功能。',
+      account: '管理您的金牌漫画账户，查看订单、收藏和评价。',
+      search: '搜索金牌漫画书店的正版中文漫画。',
+      about: '了解金牌漫画的品牌故事和使命。品质漫画，金牌之选。',
+      delivery: '配送说明与运费标准。全马配送，满RM150免运费。',
+      contact: '联系金牌漫画客服。WhatsApp、电子邮件多种方式联系我们。',
+      faq: '常见问题解答。AI客服助手为您解答漫画购买、配送、付款等问题。',
+    };
+
+    document.title = titles[route] || titles.home;
+
+    // Update meta description
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', descriptions[route] || descriptions.home);
+
+    // Update OG tags
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', titles[route] || titles.home);
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', descriptions[route] || descriptions.home);
   },
 };
 

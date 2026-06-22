@@ -255,7 +255,7 @@ const PageHome = {
     const links = [
       { text: '关于我们', route: 'about' },
       { text: '联系我们', route: 'contact' },
-      { text: '配送说明', route: 'shipping' },
+      { text: '配送说明', route: 'delivery' },
       { text: '常见问题', route: 'faq' },
     ];
 
