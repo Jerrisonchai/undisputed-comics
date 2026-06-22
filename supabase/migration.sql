@@ -7,7 +7,36 @@
 -- 1. EXTENSIONS
 create extension if not exists "uuid-ossp";
 
--- 2. PROFILES (user data linked to Supabase Auth)
+-- ============================================================
+-- 2. AUTO-CREATE PROFILE ON SIGNUP (SECURITY DEFINER — bypasses RLS)
+--    Runs immediately when a user signs up via Supabase Auth.
+--    No more silent profile creation failures due to email confirmation.
+-- ============================================================
+create or replace function handle_new_user()
+returns trigger as $$
+begin
+  insert into public.profiles (id, name, email, role)
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data->>'name', new.email),
+    new.email,
+    case when new.email = 'jerrcoc1@gmail.com' then 'admin' else 'customer' end
+  )
+  on conflict (id) do update
+    set email = excluded.email,
+        name = coalesce(nullif(excluded.name, ''), profiles.name),
+        updated_at = now();
+  return new;
+end;
+$$ language plpgsql security definer;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function handle_new_user();
+
+-- ============================================================
+-- 3. PROFILES (user data linked to Supabase Auth)
 create table if not exists profiles (
   id        uuid primary key references auth.users(id) on delete cascade,
   name      text not null default '读者',
@@ -31,7 +60,17 @@ create policy "Users can upsert own profile" on profiles
 create policy "Users can update own profile" on profiles
   for update using (auth.uid() = id);
 
--- 3. ENUMS
+-- ============================================================
+-- 3b. BACKFILL: Create admin profile for jerrcoc1@gmail.com
+--     (trigger only fires for NEW signups — backfill existing user)
+-- ============================================================
+insert into public.profiles (id, email, name, role)
+select id, email, coalesce(raw_user_meta_data->>'name', email), 'admin'
+from auth.users
+where email = 'jerrcoc1@gmail.com'
+  and not exists (select 1 from public.profiles where id = auth.users.id);
+
+-- 4. ENUMS
 create type stock_status as enum ('in_stock', 'limited', 'out_of_stock', 'pre_order');
 create type order_status as enum ('pending', 'confirmed', 'shipped', 'delivered', 'cancelled');
 create type coupon_type as enum ('percentage', 'fixed');
