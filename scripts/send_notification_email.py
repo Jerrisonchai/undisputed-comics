@@ -111,7 +111,7 @@ def send_via_smtp(msg):
 
 def main():
     if not SMTP_PASS:
-        print("[NOTIF] ⚠️ GMAIL_APP_PASSWORD not set. Set env var or hardcode for testing.")
+        print("[NOTIF] GMAIL_APP_PASSWORD not set. Set env var or hardcode for testing.")
         print("[NOTIF] No emails sent. Exiting.")
         return
 
@@ -155,7 +155,7 @@ def main():
         print(f"[NOTIF]   → {recipient} | {subject[:40]}...")
 
         if DRY_RUN:
-            print(f"[NOTIF]   (DRY RUN — not actually sent)")
+            print(f"[NOTIF]   (DRY RUN - not actually sent)")
             sent += 1
             continue
 
@@ -170,9 +170,9 @@ def main():
                     .eq("id", log_id) \
                     .execute()
             except Exception as e:
-                print(f"[NOTIF]   ⚠️ Failed to update sent status: {e}")
+                print(f"[NOTIF]   !! Failed to update sent status: {e}")
             sent += 1
-            print(f"[NOTIF]   ✅ Sent")
+            print(f"[NOTIF]   [OK] Sent")
         else:
             # Mark as failed
             try:
@@ -183,7 +183,7 @@ def main():
             except:
                 pass
             failed += 1
-            print(f"[NOTIF]   ❌ Failed")
+            print(f"[NOTIF]   [FAIL] Failed")
 
         # Rate limit
         if len(pending) > 1:

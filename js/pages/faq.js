@@ -1,74 +1,73 @@
 /**
  * faq.js — AI Chatbot FAQ (常见问题)
- * UndisputedComics (金牌漫画) v2.6
- * Keyword-matching chatbot with predefined FAQ database
+ * UndisputedComics (金牌漫画) v2.8 — Copywriting Polish
+ * Keyword-matching chatbot with 12 FAQ topics + Malaysian context
  */
 const PageFAQ = {
   _faq: [],
   _chatHistory: [],
 
   async init() {
-    // FAQ database (can be extended via copywriting.json)
     this._faq = [
       {
-        keywords: ['运费', '配送费', '邮费', 'shipping', 'delivery'],
+        keywords: ['运费', '配送费', '邮费', 'shipping', 'delivery', '邮寄', '包邮', '免邮', 'free shipping'],
         question: '运费怎么算？',
-        answer: `西马运费 RM8，东马 RM15。订单满 RM150 免运费！\n\n📦 西马：2-3 个工作日\n📦 东马：5-7 个工作日\n\n查看完整<a href="#delivery">配送说明</a>。`
+        answer: `西马运费 RM8，东马 RM15。<br><br>🎉 <strong>订单满 RM150 免运费！</strong><br><br>📦 西马：2-3 个工作日<br>📦 东马：5-7 个工作日<br><br>查看完整 <a href="#delivery">配送说明</a> 👈`
       },
       {
-        keywords: ['发货', '多久', '时间', '送达', '配送时间'],
+        keywords: ['发货', '多久', '时间', '送达', '配送时间', '几时', '几久'],
         question: '什么时候发货？多久能收到？',
-        answer: '确认付款后 <strong>24 小时内发货</strong>。\n\n📍 巴生谷：1-2 个工作日\n📍 西马其他：2-4 个工作日\n📍 东马：5-7 个工作日\n\n发货后会通过 WhatsApp 发送追踪号码。'
+        answer: '确认付款后 <strong>24 小时内发货</strong>！ ⚡<br><br>📍 巴生谷：1-2 个工作日<br>📍 西马其他：2-4 个工作日<br>📍 东马：5-7 个工作日<br><br>发货后会通过 WhatsApp 发送追踪号码给你～'
       },
       {
-        keywords: ['付款', '支付', '钱', 'bank', '转账', 'ewallet', 'tng', 'touch'],
+        keywords: ['付款', '支付', '钱', 'bank', '转账', 'ewallet', 'tng', 'touch', 'maybank', 'cimb', '怎样给钱'],
         question: '如何付款？',
-        answer: '我们接受以下付款方式：\n\n🏦 <strong>银行转账</strong>（Maybank / CIMB / Public Bank）\n📱 <strong>Touch \'n Go eWallet</strong>\n\n下单后我们会通过 WhatsApp 发送付款详情。'
+        answer: '我们接受以下付款方式 💰<br><br>🏦 <strong>银行转账</strong><br>• Maybank<br>• CIMB<br>• Public Bank<br><br>📱 <strong>Touch \'n Go eWallet</strong><br><br>下单后我们会 WhatsApp 发送付款详情，方便快捷！'
       },
       {
-        keywords: ['退货', '退款', '换货', '退钱', '损坏', 'refund', 'return'],
+        keywords: ['退货', '退款', '换货', '退钱', '损坏', 'refund', 'return', '破了', '烂了'],
         question: '可以退货或退款吗？',
-        answer: '如果您收到的商品有损坏，请在 <strong>24 小时内</strong> 拍照并通过 WhatsApp 联系我们。\n\n✅ 商品损坏 → 换货或退款\n✅ 发错商品 → 换货或退款\n❌ 个人原因退货 → 暂不支持\n\n我们会认真处理每一个问题！'
+        answer: '当然可以！我们非常重视你的权益 ❤️<br><br>✅ 商品损坏 → <strong>换货或全额退款</strong><br>✅ 发错商品 → <strong>换货或全额退款</strong><br>❌ 个人原因退货 → 暂不支持<br><br>📸 请在收到包裹 <strong>24 小时内</strong> 拍照 WhatsApp 联系我们，马上处理！'
       },
       {
-        keywords: ['正版', '盗版', '版权', '授权', 'original', 'authentic'],
+        keywords: ['正版', '盗版', '版权', '授权', 'original', 'authentic', '是不是正版', '真货'],
         question: '你们的漫画是正版吗？',
-        answer: '<strong>100% 正版授权！</strong> ✅\n\n我们直接与台湾和香港的正规出版商合作（东立、青文、尖端、天下等），每一本漫画都经过正版授权。\n\n您可以放心购买，品质有保证！'
+        answer: '<strong>100% 正版授权！</strong> ✅✅✅<br><br>我们直接与台湾和香港正规出版社合作：<br>📚 东立出版社<br>📚 青文出版社<br>📚 尖端出版<br>📚 天下出版<br><br>每一本都是正版，品质保证，安心购买！'
       },
       {
-        keywords: ['预购', '预订', '预定', 'preorder', 'pre-order'],
+        keywords: ['预购', '预订', '预定', 'preorder', 'pre-order', '还没出'],
         question: '支持预购吗？',
-        answer: '是的！部分即将出版的漫画支持预购。\n\n🔖 预购商品会在商品页标注「预购中」\n📅 预购商品通常会在出版后 1-2 周内发货\n💰 预购价格可能与正式价格有所不同\n\n预购是确保您能第一时间拿到热门新书的好方式！'
+        answer: '支持！部分即将出版的漫画开放预购 🔖<br><br>🔖 预购商品会在封面标注「预购中」<br>📅 出版后 1-2 周内发货<br>💰 预购价有时比正式价更便宜哦<br><br>预购是确保第一时间拿到热门新书的最佳方式！'
       },
       {
-        keywords: ['语言', '中文', '英文', 'language', 'chinese', 'english'],
+        keywords: ['语言', '中文', '英文', 'language', 'chinese', 'english', '简体', '繁体', '什么字'],
         question: '漫画是什么语言的？',
-        answer: '我们销售的是 <strong>繁体中文</strong> 漫画，主要来自台湾和香港的出版商。\n\n部分商品也可能提供简体中文或英文版本，会在商品描述中注明。'
+        answer: '我们主要销售 <strong>繁体中文</strong> 漫画 🇹🇼🇭🇰<br><br>来自台湾和香港的正规出版商，原汁原味的翻译品质。<br><br>部分商品可能有简体中文或英文版，会在商品描述中注明～'
       },
       {
-        keywords: ['会员', '账号', '注册', '积分', 'points', 'member'],
+        keywords: ['会员', '账号', '注册', '积分', 'points', 'member', 'sign up', '做会员'],
         question: '有会员制度吗？',
-        answer: '🏗️ 会员积分系统即将上线！\n\n目前您可以注册账号来：\n✅ 保存收藏清单\n✅ 查看订单历史\n✅ 评价商品\n\n未来积分系统上线后，购物可累积积分兑换优惠！'
+        answer: '🏗️ 会员积分系统即将上线！敬请期待～<br><br>目前注册账号可以：<br>✅ 保存收藏清单 ❤️<br>✅ 查看订单历史 📋<br>✅ 评价购买的商品 ⭐<br><br>未来积分上线后，购物累积积分兑换优惠！先注册不吃亏 😉'
       },
       {
-        keywords: ['优惠', '折扣', '便宜', 'discount', 'coupon', 'promo'],
+        keywords: ['优惠', '折扣', '便宜', 'discount', 'coupon', 'promo', '特价', 'offer', '有扣吗'],
         question: '有折扣或优惠码吗？',
-        answer: '🏗️ 优惠码系统正在开发中！\n\n目前我们提供：\n✅ 满 RM150 免运费\n✅ 新书上架优惠\n✅ 特定商品特价\n\n关注我们的 WhatsApp 频道获取最新优惠信息！'
+        answer: '🏗️ 优惠码系统开发中，但我们现在就有不少好康！<br><br>✅ <strong>满 RM150 免运费</strong><br>✅ 新书上架优惠价<br>✅ 精选商品特价<br>✅ 有些书直接打折（看价格标签 🔖）<br><br>关注我们的 WhatsApp 获取最新促销消息！'
       },
       {
-        keywords: ['联系方式', 'contact', '客服', 'whatsapp', '电话', 'email', '电邮'],
+        keywords: ['联系方式', 'contact', '客服', 'whatsapp', '电话', 'email', '电邮', '联络', '找谁'],
         question: '如何联系客服？',
-        answer: '📬 多种方式联系我们：\n\n💬 WhatsApp：<a href="#contact">查看联系页面</a>\n📧 电子邮件：<a href="#contact">查看联系页面</a>\n⏰ 营业时间：周一至周五 9AM-9PM，周六 10AM-6PM\n\n我们会在工作时间内尽快回复！'
+        answer: '多种方式任你选！📬<br><br>💬 <strong>WhatsApp：</strong><a href="#contact">点击查看号码</a><br>📧 <strong>电子邮件：</strong><a href="#contact">点击查看邮箱</a><br><br>⏰ 营业时间：周一至周五 9AM-9PM，周六 10AM-6PM<br>我们会在工作时间内尽快回复！'
       },
       {
-        keywords: ['包装', '包裹', '包装方式', 'packing'],
+        keywords: ['包装', '包裹', '包装方式', 'packing', '怎样包', '保护'],
         question: '漫画如何包装？',
-        answer: '我们非常重视包装质量！📦\n\n✅ 每本漫画先用泡泡纸包裹\n✅ 放入加固纸箱\n✅ 空隙填充缓冲材料\n✅ 外层防水包装\n\n确保您的漫画安全到达，不受损坏！'
+        answer: '我们非常重视包装！📦💪<br><br>✅ 每本漫画先用泡泡纸包裹<br>✅ 放入加厚瓦楞纸箱<br>✅ 空隙填充缓冲材料<br>✅ 最外层防水快递袋<br><br>多重保护，确保你的宝贝安全到家！'
       },
       {
-        keywords: ['hi', 'hello', '你好', '您好', '哈咯', 'halo', '帮助', 'help'],
+        keywords: ['hi', 'hello', '你好', '您好', '哈咯', 'halo', '帮助', 'help', '帮忙'],
         question: '你好！有什么可以帮你的？',
-        answer: '你好！👋 欢迎来到金牌漫画常见问题。\n\n您可以问我：\n📦 运费和配送\n💰 付款方式\n📚 商品和正版\n🔄 退货退款\n📬 联系我们\n\n直接输入您的问题，我会尽力解答！'
+        answer: '你好！👋 欢迎来到金牌漫画～<br><br>你可以问我这些问题：<br>📦 运费和配送<br>💰 付款方式<br>📚 正版保证<br>🔄 退货退款<br>📬 联系我们<br><br>直接打字问我就行，或者点下面的快捷按钮！'
       },
     ];
 
@@ -92,12 +91,9 @@ const PageFAQ = {
       if (e.key === 'Enter') ask();
     });
 
-    // Suggested questions
     document.querySelectorAll('.faq-suggestion').forEach(el => {
       el.addEventListener('click', () => {
-        this._ask(el.textContent.trim());
-        // Scroll suggestions out of view on mobile
-        el.parentElement?.scrollIntoView({ behavior: 'smooth' });
+        this._ask(el.textContent.replace(/^[^\s]+\s*/, '').trim() || el.textContent.trim());
       });
     });
   },
@@ -111,60 +107,51 @@ const PageFAQ = {
       <div class="info-hero info-hero--sm">
         <div class="info-hero__icon">🤖</div>
         <h1>常见问题</h1>
-        <p>AI 客服助手，随时为您解答</p>
+        <p>AI 小助手在线解答 · 随时问我任何问题！</p>
       </div>
 
       <div class="faq-chat" id="faq-chat">
-        <!-- Bot greeting -->
         <div class="faq-msg faq-msg--bot">
           <div class="faq-msg__avatar">🤖</div>
           <div class="faq-msg__bubble">
-            你好！👋 我是金牌漫画的 AI 客服助手。<br>
-            有什么可以帮助你的？你可以直接输入问题，或者点击下面的常见问题。
+            你好！👋 我是金牌漫画的 AI 小助手～<br><br>
+            关于漫画、订单、配送、付款……什么问题都可以问我！<br>
+            直接打字，或者点击下面的快捷问题试试看 😊
           </div>
         </div>
       </div>
 
-      <!-- Suggested questions -->
       <div class="faq-suggestions" id="faq-suggestions">
         <button class="faq-suggestion">📦 运费怎么算？</button>
         <button class="faq-suggestion">💰 如何付款？</button>
-        <button class="faq-suggestion">🔄 可以退货吗？</button>
         <button class="faq-suggestion">✅ 是正版吗？</button>
+        <button class="faq-suggestion">🔄 可以退货吗？</button>
         <button class="faq-suggestion">⏱️ 多久能收到？</button>
         <button class="faq-suggestion">📬 怎么联系客服？</button>
       </div>
 
-      <!-- Input bar -->
       <div class="faq-input-bar">
         <input type="text"
                class="faq-input-bar__input"
                id="faq-input"
-               placeholder="输入你的问题..."
+               placeholder="输入你的问题… 比如：运费多少？"
                autocomplete="off">
         <button class="faq-input-bar__send" id="faq-send" aria-label="发送">➤</button>
       </div>
     </div>`;
 
-    // Scroll chat to bottom after a moment
     setTimeout(() => this._scrollChat(), 300);
   },
 
   _ask(question) {
-    // Add user message
     this._addMessage('user', question);
-
-    // Find best match
     const answer = this._findAnswer(question);
 
-    // Show typing indicator
     const typingEl = this._addTypingIndicator();
     this._scrollChat();
 
-    // Simulate realistic typing delay
     const delay = 600 + Math.min(answer.length * 15, 2000) + Math.random() * 600;
     setTimeout(() => {
-      // Remove typing indicator
       typingEl?.remove();
       this._addMessage('bot', answer);
       this._scrollChat();
@@ -173,27 +160,22 @@ const PageFAQ = {
 
   _findAnswer(query) {
     const q = query.toLowerCase();
-
-    // Score each FAQ entry by keyword matches
     const scored = this._faq.map(entry => {
       let score = 0;
       for (const kw of entry.keywords) {
         if (q.includes(kw.toLowerCase())) score += 1;
-        // Bonus for exact keyword match
         if (q === kw.toLowerCase()) score += 2;
       }
       return { entry, score };
     });
 
-    // Sort by score, take best
     scored.sort((a, b) => b.score - a.score);
 
     if (scored[0] && scored[0].score > 0) {
       return scored[0].entry.answer;
     }
 
-    // No match — suggest topics
-    return `抱歉，我没有找到与「${query}」相关的答案。😅\n\n您可以尝试问：\n📦 运费和配送\n💰 付款方式\n📚 商品和正版\n🔄 退货退款\n📬 联系我们\n\n或者通过 <a href="#contact">WhatsApp</a> 联系人工客服！`;
+    return `抱歉，我没有找到关于「<strong>${query}</strong>」的答案 😅<br><br>你可以试试问：<br>📦 运费和配送<br>💰 付款方式<br>📚 正版保证<br>🔄 退货退款<br>📬 联系我们<br><br>或者直接 <a href="#contact">WhatsApp 人工客服</a>，我们很乐意帮你！`;
   },
 
   _addMessage(type, text) {

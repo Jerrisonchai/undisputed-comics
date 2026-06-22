@@ -75,7 +75,7 @@ const PageHome = {
 
   /* ═══════════ HERO ═══════════ */
   _renderHero() {
-    const tagline = this._copy?.brand?.tagline || '品质漫画，金牌之选';
+    const tagline = this._copy?.brand?.tagline || '每一页都是宝藏';
     const heroUrl = window.AppConfig?.store?.hero_banner_url || '';
 
     return `
@@ -84,9 +84,9 @@ const PageHome = {
       <div class="hero__overlay"></div>
       <div class="hero__content">
         <h1 class="hero__tagline">${Utils.escapeHTML(tagline)}</h1>
-        <p class="hero__subtitle">${Utils.escapeHTML(this._copy?.brand?.footer_about?.slice(0, 60) || '为您精选正版中文漫画')}</p>
+        <p class="hero__subtitle">${Utils.escapeHTML(this._copy?.brand?.footer_about?.slice(0, 80) || '正版中文漫画 · 全马配送 · 满额免邮 · WhatsApp 客服')}</p>
         <button class="btn btn--primary" onclick="AppRouter.navigate('products')">
-          ${Utils.escapeHTML(this._copy?.home?.hero_cta || '立即选购')} →
+          ${Utils.escapeHTML(this._copy?.home?.hero_cta || '🛒 开始淘漫画')}
         </button>
       </div>
     </section>`;
@@ -239,12 +239,12 @@ const PageHome = {
   _renderSubscribe() {
     return `
     <section class="subscribe-section">
-      <h2 class="subscribe-section__title">📧 ${Utils.escapeHTML(this._copy?.home?.subscribe_title || '订阅我们的通讯')}</h2>
-      <p class="subscribe-section__desc">${Utils.escapeHTML(this._copy?.home?.subscribe_desc || '')}</p>
+      <h2 class="subscribe-section__title">📧 ${Utils.escapeHTML(this._copy?.home?.subscribe_title || '订阅我们的漫画通讯')}</h2>
+      <p class="subscribe-section__desc">${Utils.escapeHTML(this._copy?.home?.subscribe_desc || '第一时间获取新书上架、优惠活动和漫画推荐！')}</p>
       <div class="subscribe-form">
-        <input type="email" id="subscribe-email" placeholder="${Utils.escapeHTML(this._copy?.home?.subscribe_placeholder || '输入您的电子邮箱')}">
+        <input type="email" id="subscribe-email" placeholder="${Utils.escapeHTML(this._copy?.home?.subscribe_placeholder || '输入你的Email…')}">
         <button class="btn btn--primary" id="btn-subscribe">
-          ${Utils.escapeHTML(this._copy?.home?.subscribe_btn || '订阅')}
+          ${Utils.escapeHTML(this._copy?.home?.subscribe_btn || '📬 免费订阅')}
         </button>
       </div>
     </section>`;
@@ -336,7 +336,7 @@ const PageHome = {
         }
         const result = await EmailModule.subscribe(email);
         input.value = '';
-        Utils.toast(result.message || '订阅成功！感谢您的关注。', result.ok ? 'success' : 'error');
+        Utils.toast(result.message || '订阅成功！🎉 新书上架第一时间通知你～', result.ok ? 'success' : 'error');
       });
     }
   },

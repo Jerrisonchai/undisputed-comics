@@ -13,7 +13,7 @@ window.AppConfig = {
   store: {
     name_zh: '金牌漫画',
     name_en: 'UndisputedComics',
-    tagline: '品质漫画，金牌之选',
+    tagline: '每一页都是宝藏',
     phone: '+6012-3456789',
     shippingFlatWest: 8.00,
     shippingFlatEast: 15.00,
@@ -34,5 +34,5 @@ window.AppConfig = {
   api: {},
 
   // Version bump for cache busting
-  version: '2.7.2',
+  version: '2.8',
 };
