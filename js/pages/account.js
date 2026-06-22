@@ -1,10 +1,10 @@
 /**
  * account.js — Account / Profile Page
- * UndisputedComics (金牌漫画) v2.2
+ * UndisputedComics (金牌漫画) v2.3
  * Shows user profile, order history, saved info.
  */
 const PageAccount = {
-  _view: 'menu', // 'menu' | 'orders' | 'profile'
+  _view: 'menu', // 'menu' | 'orders' | 'profile' | 'favorites'
 
   init() {
     if (!AuthModule.isLoggedIn()) {
@@ -16,7 +16,19 @@ const PageAccount = {
   },
 
   bindEvents() {
-    // Menu items
+    this._bindMenuEvents();
+
+    // Profile form
+    document.getElementById('profile-form')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      this._handleProfileSave();
+    });
+  },
+
+  /**
+   * Re-bind menu button events. Called after every _renderMenu().
+   */
+  _bindMenuEvents() {
     document.getElementById('btn-orders')?.addEventListener('click', () => {
       this._view = 'orders';
       this._renderOrders();
@@ -41,12 +53,6 @@ const PageAccount = {
       if (confirm('确定要退出登录吗？')) {
         AuthModule.logout();
       }
-    });
-
-    // Profile form
-    document.getElementById('profile-form')?.addEventListener('submit', (e) => {
-      e.preventDefault();
-      this._handleProfileSave();
     });
   },
 
@@ -93,7 +99,7 @@ const PageAccount = {
       </button>
 
       <button class="account-menu__item" id="btn-profile">
-        <span class="account-menu__icon">⚙️</span>
+        <span class="account-menu__icon">👤</span>
         <span>个人信息</span>
         <span style="margin-left:auto;font-size:var(--text-xs);color:var(--text-muted);">编辑</span>
       </button>
@@ -103,6 +109,9 @@ const PageAccount = {
         <span>退出登录</span>
       </button>
     </div>`;
+
+    // CRITICAL: Re-bind menu events after replacing innerHTML
+    this._bindMenuEvents();
   },
 
   async _renderOrders() {
@@ -119,11 +128,12 @@ const PageAccount = {
       </div>
       <div class="order-empty">
         <div class="order-empty__icon">📭</div>
-        <p class="order-empty__text">还没有订单</p>
+        <p class="order-empty__text">还没有任何订单</p>
         <button class="btn btn--primary" onclick="AppRouter.navigate('products')">
           去逛逛
         </button>
       </div>`;
+      this._bindMenuEvents();
       return;
     }
 
@@ -140,26 +150,25 @@ const PageAccount = {
       ${sorted.map(o => this._renderOrderCard(o)).join('')}
     </div>`;
 
-    // Re-bind back button
-    document.getElementById('btn-back-menu').addEventListener('click', () => {
-      this._view = 'menu';
-      this._renderMenu();
-    });
+    this._bindMenuEvents();
   },
 
   _renderOrderCard(order) {
     const statusMap = {
-      pending: '待确认',
+      pending: '待处理',
       confirmed: '已确认',
       shipped: '已发货',
       delivered: '已签收',
+      cancelled: '已取消',
     };
     const statusZh = statusMap[order.status] || order.status;
-    const date = order.createdAt
-      ? new Date(order.createdAt).toLocaleDateString('zh-MY', { year:'numeric',month:'long',day:'numeric' })
+    const createdAt = order.createdAt || order.created_at;
+    const date = createdAt
+      ? new Date(createdAt).toLocaleDateString('zh-MY', { year:'numeric',month:'long',day:'numeric' })
       : '';
-    const itemsText = (order.items || []).slice(0, 2).map(i => i.title_zh).join('、');
-    const moreText = (order.items || []).length > 2 ? ` 等${order.items.length}件` : '';
+    const items = order.items || [];
+    const itemsText = items.slice(0, 2).map(i => i.title_zh || i.product_title).join('、');
+    const moreText = items.length > 2 ? ` +${items.length}件` : '';
 
     return `
     <div class="order-card">
@@ -216,14 +225,15 @@ const PageAccount = {
       <button type="submit" class="btn btn--primary">保存更改</button>
     </form>`;
 
-    // Re-bind back button
-    document.getElementById('btn-back-menu').addEventListener('click', () => {
-      this._view = 'menu';
-      this._renderMenu();
+    // Re-bind back button + profile form
+    this._bindMenuEvents();
+    document.getElementById('profile-form')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      this._handleProfileSave();
     });
   },
 
-  _handleProfileSave() {
+  async _handleProfileSave() {
     const updates = {
       name: document.getElementById('prof-name').value.trim(),
       phone: document.getElementById('prof-phone').value.trim(),
@@ -235,13 +245,11 @@ const PageAccount = {
       return;
     }
 
-    const result = AuthModule.updateProfile(updates);
-    if (result.ok) {
-      const user = AuthModule.getUser();
-      const nameEl = document.querySelector('.account-name');
-      if (nameEl) nameEl.textContent = user.name;
-      alert('已保存！');
-    }
+    await AuthModule.updateProfile(updates);
+    const user = AuthModule.getUser();
+    const nameEl = document.querySelector('.account-name');
+    if (nameEl) nameEl.textContent = user.name;
+    alert('已保存！');
   },
 
   /**
@@ -270,43 +278,44 @@ const PageAccount = {
         </button>
       </div>`;
     } else {
-      // Fetch product data for favorites
+      // Fetch product data — try Supabase first, then localStorage
+      let products = [];
       try {
-        const res = await fetch('data/products.json');
-        const data = await res.json();
-        const products = data.products || [];
-
-        const favProducts = favIds.map(id => products.find(p => p.id === id)).filter(Boolean);
-
-        container.innerHTML += `
-        <div class="product-listing-grid">
-          ${favProducts.map(p => this._renderFavCard(p)).join('')}
-        </div>`;
-
-        // Click handlers
-        container.querySelectorAll('.product-card').forEach(card => {
-          card.addEventListener('click', () => {
-            AppRouter.navigate('product', { id: card.dataset.productId });
-          });
-        });
-
-        // Remove from favorites
-        container.querySelectorAll('.btn-fav-remove').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            FavoritesModule.toggle(btn.dataset.productId);
-            this._renderFavorites();
-          });
-        });
+        const data = await API.fetchProducts();
+        products = Array.isArray(data) ? data : (data.products || []);
       } catch {
-        container.innerHTML += '<p style="text-align:center;color:var(--text-secondary);">加载失败</p>';
+        try {
+          const res = await fetch('data/products.json');
+          const data = await res.json();
+          products = data.products || [];
+        } catch {}
       }
+
+      const favProducts = favIds.map(id => products.find(p => p.id === id)).filter(Boolean);
+
+      container.innerHTML += `
+      <div class="product-listing-grid">
+        ${favProducts.map(p => this._renderFavCard(p)).join('')}
+      </div>`;
+
+      // Click handlers
+      container.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('click', () => {
+          AppRouter.navigate('product', { id: card.dataset.productId });
+        });
+      });
+
+      // Remove from favorites
+      container.querySelectorAll('.btn-fav-remove').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          await FavoritesModule.toggle(btn.dataset.productId);
+          this._renderFavorites();
+        });
+      });
     }
 
-    document.getElementById('btn-back-menu').addEventListener('click', () => {
-      this._view = 'menu';
-      this._renderMenu();
-    });
+    this._bindMenuEvents();
   },
 
   _renderFavCard(product) {

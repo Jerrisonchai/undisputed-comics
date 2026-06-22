@@ -93,9 +93,9 @@ const PageProductDetail = {
     // Rating stars
     this._renderStars();
     document.querySelectorAll('#pdp-stars .star-rating__star--clickable').forEach(star => {
-      star.addEventListener('click', () => {
+      star.addEventListener('click', async () => {
         const rating = parseInt(star.dataset.rating);
-        const result = RatingsModule.rate(this._product.id, rating);
+        const result = await RatingsModule.rate(this._product.id, rating);
         if (result.ok) {
           this._renderStars();
           Utils.toast(`已评分 ${rating}⭐`, 'success');
@@ -108,8 +108,8 @@ const PageProductDetail = {
     // Favorite button
     const favBtn = document.getElementById('pdp-fav-btn');
     if (favBtn) {
-      favBtn.addEventListener('click', () => {
-        const result = FavoritesModule.toggle(this._product.id);
+      favBtn.addEventListener('click', async () => {
+        const result = await FavoritesModule.toggle(this._product.id);
         if (result.ok) {
           this._renderFavButton();
           Utils.toast(result.favorited ? '已加入收藏 ❤️' : '已取消收藏', 'success');
