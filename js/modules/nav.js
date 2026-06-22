@@ -50,6 +50,10 @@ const Nav = {
       window.AppRouter?.navigate('home');
     });
 
+    document.getElementById('btn-theme').addEventListener('click', () => {
+      ThemeToggle.toggle();
+    });
+
     document.getElementById('btn-search').addEventListener('click', () => {
       window.AppRouter?.navigate('search');
     });
