@@ -31,15 +31,18 @@ const PageHome = {
    * Load all required JSON data
    */
   async _loadData() {
-    const [products, categories, publishers, copy] = await Promise.all([
-      Utils.loadJSON('data/products.json'),
+    const [productsData, categories, publishers, copy] = await Promise.all([
+      API.fetchProducts().catch(async () => {
+        try { return await Utils.loadJSON('data/products.json'); }
+        catch { return { products: [] }; }
+      }),
       Utils.loadJSON('data/categories.json'),
       Utils.loadJSON('data/publishers.json'),
       Utils.loadJSON('data/copywriting.json'),
     ]);
 
     this._data = {
-      products: products?.products || [],
+      products: Array.isArray(productsData) ? productsData : (productsData?.products || []),
       categories: categories?.categories || [],
       publishers: publishers?.publishers || [],
       copy: copy || {},

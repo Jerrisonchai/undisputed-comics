@@ -5,9 +5,9 @@
  */
 
 window.AppConfig = {
-  // Supabase (Phase 4+)
-  supabaseUrl: '',
-  supabaseKey: '',
+  // Supabase (Phase 5)
+  supabaseUrl: 'https://fdusyudelkhoomakdfel.supabase.co',
+  supabaseKey: 'sb_publishable_hMpj6OKgcZno6jUBEm4xSg_lRDVe9Vf',
 
   // Site config — defaults, overridden by Supabase site_settings later
   store: {
@@ -34,5 +34,5 @@ window.AppConfig = {
   api: {},
 
   // Version bump for cache busting
-  version: '2.2.3',
+  version: '2.3.0',
 };

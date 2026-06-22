@@ -11,9 +11,18 @@ const AppRouter = {
   /**
    * Initialize the app
    */
-  init() {
+  async init() {
     ThemeToggle.init();
-    AuthModule.init();
+
+    // Init Supabase + restore session
+    await AuthModule.init();
+
+    // Preload ratings & favorites from Supabase
+    await Promise.all([
+      RatingsModule.preload(),
+      FavoritesModule.preload(),
+    ]);
+
     Nav.init();
 
     // Parse initial hash or default to home

@@ -86,17 +86,16 @@ const PageLogin = {
     </div>`;
   },
 
-  _handleLogin() {
+  async _handleLogin() {
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
     const alertEl = document.getElementById('auth-alert');
 
-    // Clear errors
     document.querySelectorAll('.form-group__error').forEach(el => el.textContent = '');
     alertEl.className = 'auth-alert';
     alertEl.textContent = '';
 
-    const result = AuthModule.login({ email, password });
+    const result = await AuthModule.login({ email, password });
     if (!result.ok) {
       alertEl.className = 'auth-alert auth-alert--error';
       alertEl.textContent = result.error;

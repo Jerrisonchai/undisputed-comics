@@ -88,7 +88,7 @@ const PageRegister = {
     </div>`;
   },
 
-  _handleRegister() {
+  async _handleRegister() {
     const name = document.getElementById('reg-name').value.trim();
     const email = document.getElementById('reg-email').value.trim();
     const password = document.getElementById('reg-password').value;
@@ -112,7 +112,7 @@ const PageRegister = {
       return;
     }
 
-    const result = AuthModule.register({ name, email, password });
+    const result = await AuthModule.register({ name, email, password });
     if (!result.ok) {
       alertEl.className = 'auth-alert auth-alert--error';
       alertEl.textContent = result.error;

@@ -18,14 +18,18 @@ const PageProducts = {
     this._activePublisher = publisher || null;
     this._searchQuery = search || '';
 
-    // Fetch both data sources in parallel
-    const [prodRes, catRes, pubRes] = await Promise.all([
-      fetch('data/products.json').then(r => r.json()),
+    // Fetch products from Supabase (with fallback to static JSON)
+    const [prodData, catRes, pubRes] = await Promise.all([
+      API.fetchProducts().catch(async () => {
+        try { return (await fetch('data/products.json').then(r => r.json())).products || []; }
+        catch { return []; }
+      }),
       fetch('data/categories.json').then(r => r.json()),
       fetch('data/publishers.json').then(r => r.json()),
     ]);
 
-    this._products = prodRes.products || [];
+    // API.fetchProducts returns array directly, static JSON returns { products: [...] }
+    this._products = Array.isArray(prodData) ? prodData : (prodData.products || []);
     this._categories = catRes.categories || [];
     this._publishers = pubRes.publishers || [];
 

@@ -86,6 +86,30 @@ const OrdersModule = {
   },
 
   /**
+   * Create order from raw data (used by API.js as fallback)
+   */
+  _createLocal(orderData) {
+    const order = {
+      id: orderData.id || 'ORD-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 6).toUpperCase(),
+      userId: orderData.user_id || null,
+      items: [],
+      customer: {
+        name: orderData.customer_name || '',
+        phone: orderData.customer_phone || '',
+        email: orderData.customer_email || '',
+        notes: orderData.notes || '',
+      },
+      subtotal: orderData.subtotal || 0,
+      shipping: orderData.shipping || 0,
+      total: orderData.total || 0,
+      status: orderData.status || 'pending',
+      createdAt: orderData.created_at || new Date().toISOString(),
+    };
+    this._saveToHistory(order);
+    return order;
+  },
+
+  /**
    * Get order history
    * @returns {Array}
    */

@@ -11,13 +11,16 @@ const PageProductDetail = {
   _quantity: 1,
 
   async init(productId) {
-    // Fetch data
-    const [prodRes, pubRes] = await Promise.all([
-      fetch('data/products.json').then(r => r.json()),
+    // Fetch products from Supabase (with fallback)
+    const [prodData, pubRes] = await Promise.all([
+      API.fetchProducts().catch(async () => {
+        try { return (await fetch('data/products.json').then(r => r.json())).products || []; }
+        catch { return []; }
+      }),
       fetch('data/publishers.json').then(r => r.json()),
     ]);
 
-    this._products = prodRes.products || [];
+    this._products = Array.isArray(prodData) ? prodData : (prodData.products || []);
     this._publishers = pubRes.publishers || [];
     this._product = this._products.find(p => p.id === productId);
     this._quantity = 1;
