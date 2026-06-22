@@ -176,7 +176,16 @@ const PageProducts = {
       case 'price-desc':
         return items.sort((a, b) => b.price - a.price);
       case 'popular':
-        return items.sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0) || a.sort_order - b.sort_order);
+        return items.sort((a, b) => {
+          const ra = RatingsModule.getAverage(a.id);
+          const rb = RatingsModule.getAverage(b.id);
+          // Higher average rating first
+          if (rb.average !== ra.average) return rb.average - ra.average;
+          // More ratings breaks ties
+          if (rb.count !== ra.count) return rb.count - ra.count;
+          // Fallback: sort_order for unrated
+          return a.sort_order - b.sort_order;
+        });
       default: // featured
         return items.sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0) || a.sort_order - b.sort_order);
     }
