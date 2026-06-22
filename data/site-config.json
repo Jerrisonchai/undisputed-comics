@@ -1,0 +1,18 @@
+{
+  "_note": "Default site configuration. Override via Supabase site_settings table after Phase 5.",
+  "store_name_zh": "金牌漫画",
+  "store_name_en": "UndisputedComics",
+  "logo_url": "",
+  "hero_banner_url": "https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=750&q=80",
+  "hero_tagline_zh": "品质漫画，金牌之选",
+  "store_phone": "+6012-3456789",
+  "store_email": "",
+  "shipping_flat_west": 8.00,
+  "shipping_flat_east": 15.00,
+  "shipping_free_min": 150.00,
+  "coupons_enabled": false,
+  "points_enabled": false,
+  "points_earn_rate": 1,
+  "points_redeem_rate": 100,
+  "min_points_redeem": 100
+}

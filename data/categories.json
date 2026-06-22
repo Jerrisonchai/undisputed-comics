@@ -1,0 +1,10 @@
+{
+  "categories": [
+    { "id": "all", "name_zh": "全部", "icon": "📚" },
+    { "id": "shonen", "name_zh": "少年漫画", "icon": "🔥" },
+    { "id": "shojo", "name_zh": "少女漫画", "icon": "🌸" },
+    { "id": "seinen", "name_zh": "青年漫画", "icon": "🎯" },
+    { "id": "classics", "name_zh": "经典收藏", "icon": "💎" },
+    { "id": "new-releases", "name_zh": "熱門新作", "icon": "🆕" }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "publishers": [
+    { "id": "tongli", "name_zh": "東立", "slug": "tongli" },
+    { "id": "sharp-point", "name_zh": "尖端", "slug": "sharp-point" },
+    { "id": "tongpan", "name_zh": "東販", "slug": "tongpan" }
+  ]
+}

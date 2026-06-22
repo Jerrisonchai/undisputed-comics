@@ -1,0 +1,137 @@
+{
+  "_note": "ALL Chinese UI text centralized here. Change once, update everywhere.",
+  "brand": {
+    "name_zh": "金牌漫画",
+    "name_en": "UndisputedComics",
+    "tagline": "品质漫画，金牌之选",
+    "footer_about": "金牌漫画为您精选正版中文漫画，涵盖少年、少女、青年、经典等各类漫画作品。我们致力于为漫画收藏者提供最优质的服务。"
+  },
+  "nav": {
+    "home": "首页",
+    "categories": "分类",
+    "cart": "购物车",
+    "account": "我的",
+    "search_placeholder": "搜索漫画、出版社...",
+    "back": "返回"
+  },
+  "home": {
+    "hero_cta": "立即选购",
+    "featured_title": "本周推荐",
+    "bestsellers_title": "热销排行",
+    "new_arrivals_title": "最新上架",
+    "publishers_title": "出版社",
+    "subscribe_title": "订阅我们的通讯",
+    "subscribe_desc": "获取最新上架通知和独家优惠",
+    "subscribe_placeholder": "输入您的电子邮箱",
+    "subscribe_btn": "订阅",
+    "subscribe_success": "订阅成功！感谢您的关注。",
+    "view_all": "查看全部"
+  },
+  "products": {
+    "sort_newest": "最新",
+    "sort_price_low": "价格低→高",
+    "sort_price_high": "价格高→低",
+    "sort_popular": "热门",
+    "result_count": "件商品",
+    "load_more": "加载更多",
+    "no_results": "没有找到相关商品",
+    "add_to_cart": "加入购物车",
+    "buy_now": "立即购买",
+    "quantity": "数量",
+    "description": "商品描述",
+    "related": "相关推荐",
+    "publisher_label": "出版社"
+  },
+  "cart": {
+    "title": "购物车",
+    "empty": "购物车是空的",
+    "empty_cta": "去逛逛",
+    "coupon_label": "优惠码",
+    "coupon_placeholder": "输入优惠码",
+    "coupon_apply": "使用",
+    "coupon_remove": "移除",
+    "subtotal": "小计",
+    "discount": "优惠",
+    "points_label": "积分抵扣",
+    "shipping": "运费",
+    "total": "总计",
+    "checkout": "去结算",
+    "free_shipping": "免运费",
+    "remove_item": "删除"
+  },
+  "checkout": {
+    "title": "结算",
+    "step1_title": "联系信息",
+    "name_label": "姓名",
+    "name_placeholder": "请输入您的姓名",
+    "phone_label": "电话号码",
+    "phone_placeholder": "例如：012-3456789",
+    "email_label": "电子邮箱（选填）",
+    "email_placeholder": "用于接收订单通知",
+    "notes_label": "备注（选填）",
+    "notes_placeholder": "如有特别要求，请在此留言",
+    "step2_title": "订单确认",
+    "confirm_btn": "通过WhatsApp确认订单",
+    "whatsapp_prefill": "您好，我想订购以下漫画：",
+    "success_title": "订单已提交！",
+    "success_msg": "请通过WhatsApp发送订单信息以完成购买。我们会尽快回复您。",
+    "back_to_shop": "返回商店"
+  },
+  "auth": {
+    "login_title": "登录",
+    "register_title": "注册",
+    "email_label": "电子邮箱",
+    "password_label": "密码",
+    "name_label": "姓名",
+    "login_btn": "登录",
+    "register_btn": "注册",
+    "no_account": "还没有账户？",
+    "has_account": "已有账户？",
+    "register_link": "立即注册",
+    "login_link": "立即登录",
+    "logout": "退出登录",
+    "guest_checkout": "以访客身份继续",
+    "forgot_password": "忘记密码？"
+  },
+  "account": {
+    "title": "我的账户",
+    "orders": "我的订单",
+    "points": "我的积分",
+    "coupons": "我的优惠券",
+    "settings": "设置",
+    "edit_profile": "编辑资料",
+    "login_prompt": "登录以查看订单和积分",
+    "points_balance": "分",
+    "order_history": "订单历史",
+    "no_orders": "还没有订单"
+  },
+  "badges": {
+    "in_stock": "现货",
+    "pre_order": "預購",
+    "limited": "限量",
+    "sold_out": "售完",
+    "new": "新品",
+    "sale": "优惠"
+  },
+  "footer": {
+    "about": "关于我们",
+    "contact": "联系我们",
+    "faq": "常见问题",
+    "shipping": "配送说明",
+    "terms": "条款与条件",
+    "privacy": "隐私政策",
+    "copyright": "© 2026 金牌漫画 版权所有"
+  },
+  "errors": {
+    "required": "此栏位为必填",
+    "invalid_email": "请输入有效的电子邮箱",
+    "invalid_phone": "请输入有效的电话号码",
+    "network_error": "网络连接失败，请稍后再试",
+    "general": "出现错误，请稍后再试"
+  },
+  "trust": {
+    "genuine": "正版保证",
+    "secure": "安全购物",
+    "support": "WhatsApp客服"
+  }
+}
