@@ -235,12 +235,14 @@ const PageProducts = {
     const pubName = this._getPublisherName(product.publisher);
     const hasOriginal = product.original_price && product.original_price > product.price;
     const ratingHTML = this._renderCardRating(product.id);
+    const coverUrl = product.cover_image || product.cover_url || '';
+    const coverHTML = coverUrl && !coverUrl.includes('placeholder')
+      ? `<img class="product-card__image" src="${Utils.escapeHTML(coverUrl)}" alt="${Utils.escapeHTML(product.title_zh)}" loading="lazy">`
+      : `<div class="product-card__image product-card__image--placeholder">${catName ? catName.charAt(0) : '📚'}</div>`;
 
     return `
     <div class="product-card" data-product-id="${product.id}">
-      <div class="product-card__image--placeholder">
-        ${catName ? catName.charAt(0) : '📚'}
-      </div>
+      ${coverHTML}
       <div class="product-card__body">
         <div class="product-card__badges">
           ${stockBadge}

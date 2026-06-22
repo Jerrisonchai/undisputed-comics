@@ -37,10 +37,25 @@ const API = {
   // ═══════════════════════════════════════════
 
   /**
+   * Normalize product fields (Supabase cover_url → cover_image, etc)
+   */
+  _normalizeProduct(p) {
+    if (!p) return p;
+    const out = { ...p };
+    // Map cover_url to cover_image for consistent rendering
+    if (!out.cover_image && out.cover_url) out.cover_image = out.cover_url;
+    if (!out.cover_url && out.cover_image) out.cover_url = out.cover_image;
+    return out;
+  },
+
+  /**
    * Fetch all active products
    */
   async fetchProducts() {
-    if (!this.isReady()) return this._localProducts();
+    if (!this.isReady()) {
+      const local = this._localProducts();
+      return Array.isArray(local) ? local.map(p => this._normalizeProduct(p)) : (local?.products || []).map(p => this._normalizeProduct(p));
+    }
     try {
       const { data, error } = await this._client
         .from('products')
@@ -48,9 +63,10 @@ const API = {
         .eq('is_active', true)
         .order('sort_order', { ascending: true });
       if (error) throw error;
+      const normalized = (data || []).map(p => this._normalizeProduct(p));
       // Cache locally
-      Storage.set('products_cache', data, 30 * 60 * 1000);
-      return data;
+      Storage.set('products_cache', normalized, 30 * 60 * 1000);
+      return normalized;
     } catch (e) {
       console.warn('[API] fetchProducts failed, using cache:', e.message);
       return Storage.get('products_cache') || this._localProducts();
@@ -61,7 +77,7 @@ const API = {
    * Fetch single product by ID
    */
   async fetchProduct(id) {
-    if (!this.isReady()) return this._localProduct(id);
+    if (!this.isReady()) return this._normalizeProduct(this._localProduct(id));
     try {
       const { data, error } = await this._client
         .from('products')
@@ -69,7 +85,7 @@ const API = {
         .eq('id', id)
         .single();
       if (error) throw error;
-      return data;
+      return this._normalizeProduct(data);
     } catch (e) {
       console.warn('[API] fetchProduct failed:', e.message);
       return this._localProduct(id);

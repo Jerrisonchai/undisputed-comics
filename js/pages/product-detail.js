@@ -133,11 +133,16 @@ const PageProductDetail = {
     const hasOriginal = p.original_price && p.original_price > p.price;
     const savings = hasOriginal ? p.original_price - p.price : 0;
 
+    const coverUrl = p.cover_image || p.cover_url || '';
+    const galleryHTML = coverUrl && !coverUrl.includes('placeholder')
+      ? `<img class="pdp-gallery__img" src="${Utils.escapeHTML(coverUrl)}" alt="${Utils.escapeHTML(p.title_zh)}">`
+      : `<div class="pdp-gallery__placeholder">📚</div>`;
+
     main.innerHTML = `
     <div class="page" id="product-detail-page">
       <!-- Gallery -->
       <div class="pdp-gallery">
-        <div class="pdp-gallery__placeholder">📚</div>
+        ${galleryHTML}
         ${p.images && p.images.length > 1 ? `
         <div class="pdp-gallery__nav">
           ${p.images.map((_, i) => `<div class="pdp-gallery__dot${i === 0 ? ' active' : ''}"></div>`).join('')}
