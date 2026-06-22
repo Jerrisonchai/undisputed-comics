@@ -10,21 +10,16 @@ const ThemeToggle = {
    * Initialize theme — apply saved or system preference, render button
    */
   init() {
+    // Only use saved preference — default to light (no data-theme attribute)
     const saved = Storage.get('theme');
-    if (saved === 'dark' || saved === 'light') {
-      document.documentElement.setAttribute('data-theme', saved);
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    if (saved === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark');
+    } else if (saved === 'light') {
+      // Explicitly set light if user previously chose it
+      document.documentElement.setAttribute('data-theme', 'light');
     }
+    // No saved preference → no data-theme attribute → CSS defaults to light
     this._renderButton();
-
-    // Listen for system theme changes (only if user hasn't manually set)
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-      if (!Storage.get('theme')) {
-        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-        this._renderButton();
-      }
-    });
   },
 
   /**
