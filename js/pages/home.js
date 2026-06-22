@@ -95,7 +95,7 @@ const PageHome = {
       <button class="chip${cat.id === 'all' ? ' active' : ''}"
               data-category="${cat.id}"
               onclick="AppRouter.navigate('products', {category:'${cat.id}'})">
-        <span>${cat.icon}</span>
+        <span class="chip-icon">${cat.icon}</span>
         <span>${cat.name_zh}</span>
       </button>
     `).join('');

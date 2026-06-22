@@ -63,7 +63,7 @@ const Nav = {
 
     bottomNav.innerHTML = this._tabs.map(tab => `
       <button class="tab-btn" data-route="${tab.id}" aria-label="${tab.label}">
-        <span class="tab-icon">${tab.icon}</span>
+        <span class="tab-icon-wrap">${tab.icon}</span>
         <span>${tab.label}</span>
         ${tab.id === 'cart' ? '<span class="cart-badge" id="cart-badge-bottom"></span>' : ''}
       </button>
