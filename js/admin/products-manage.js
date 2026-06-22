@@ -387,7 +387,7 @@ const AdminProducts = {
    */
   async _openMediaPicker() {
     const sb = AdminAuth._getClient();
-    const config = typeof Config !== 'undefined' ? Config : { SUPABASE_URL: 'https://fdusyudelkhoomakdfel.supabase.co' };
+    const supabaseUrl = (typeof Config !== 'undefined' ? Config.SUPABASE_URL : 'https://fdusyudelkhoomakdfel.supabase.co');
     const bucket = 'media';
     let files = [];
 
@@ -401,6 +401,17 @@ const AdminProducts = {
 
     const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp', '.avif'];
     const isImage = (name) => imageExts.some(ext => name.toLowerCase().endsWith(ext));
+
+    // Build media card HTML without nested template literal madness
+    const mediaCards = files.filter(f => isImage(f.name)).map(f => {
+      const url = supabaseUrl + '/storage/v1/object/public/' + bucket + '/' + f.name;
+      return '<div class="media-pick-card" data-url="' + url + '" style="cursor:pointer;border:2px solid transparent;border-radius:10px;overflow:hidden;transition:all 0.2s;background:#f7fafc;">' +
+        '<div style="aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;overflow:hidden;">' +
+        '<img src="' + url + '" alt="' + this._esc(f.name) + '" style="width:100%;height:100%;object-fit:cover;" loading="lazy">' +
+        '</div>' +
+        '<div style="padding:6px;font-size:11px;color:#718096;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + this._esc(f.name) + '">' + this._esc(f.name) + '</div>' +
+        '</div>';
+    }).join('');
 
     const modal = document.createElement('div');
     modal.className = 'modal-overlay';
@@ -418,17 +429,7 @@ const AdminProducts = {
             </div>
           ` : `
             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;">
-              ${files.filter(f => isImage(f.name)).map(f => {
-                const url = ${JSON.stringify(config.SUPABASE_URL)} + '/storage/v1/object/public/' + bucket + '/' + f.name;
-                return `
-                  <div class="media-pick-card" data-url="${url}" style="cursor:pointer;border:2px solid transparent;border-radius:10px;overflow:hidden;transition:all 0.2s;background:#f7fafc;" onmouseenter="this.style.borderColor='var(--admin-sidebar-active)'" onmouseleave="this.style.borderColor='transparent'">
-                    <div style="aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;overflow:hidden;">
-                      <img src="${url}" alt="${this._esc(f.name)}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
-                    </div>
-                    <div style="padding:6px;font-size:11px;color:#718096;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${this._esc(f.name)}">${this._esc(f.name)}</div>
-                  </div>
-                `;
-              }).join('')}
+              ${mediaCards}
             </div>
           `}
         </div>

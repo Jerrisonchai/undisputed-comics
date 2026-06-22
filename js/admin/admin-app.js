@@ -77,11 +77,12 @@ const AdminRouter = {
     });
 
     // Mobile menu toggle
-    document.getElementById('admin-menu-toggle')?.addEventListener('click', () => {
+    document.getElementById('admin-menu-toggle')?.addEventListener('click', (e) => {
+      e.stopPropagation(); // prevent .admin-main click from immediately closing
       document.querySelector('.admin-sidebar')?.classList.toggle('open');
     });
 
-    // Close sidebar when clicking main content on mobile
+    // Close sidebar when clicking main content (but not the hamburger)
     document.querySelector('.admin-main')?.addEventListener('click', () => {
       document.querySelector('.admin-sidebar')?.classList.remove('open');
     });
