@@ -22,6 +22,11 @@ const PageAccount = {
       this._renderOrders();
     });
 
+    document.getElementById('btn-favorites')?.addEventListener('click', () => {
+      this._view = 'favorites';
+      this._renderFavorites();
+    });
+
     document.getElementById('btn-profile')?.addEventListener('click', () => {
       this._view = 'profile';
       this._renderProfile();
@@ -70,6 +75,7 @@ const PageAccount = {
     if (!container) return;
 
     const orderCount = AuthModule.getOrders().length;
+    const favCount = FavoritesModule.count();
 
     container.innerHTML = `
     <div class="account-menu">
@@ -77,6 +83,12 @@ const PageAccount = {
         <span class="account-menu__icon">📦</span>
         <span>我的订单</span>
         <span style="margin-left:auto;font-size:var(--text-sm);color:var(--text-muted);">${orderCount} 条</span>
+      </button>
+
+      <button class="account-menu__item" id="btn-favorites">
+        <span class="account-menu__icon">❤️</span>
+        <span>我的收藏</span>
+        <span style="margin-left:auto;font-size:var(--text-sm);color:var(--text-muted);">${favCount} 本</span>
       </button>
 
       <button class="account-menu__item" id="btn-profile">
@@ -224,11 +236,96 @@ const PageAccount = {
 
     const result = AuthModule.updateProfile(updates);
     if (result.ok) {
-      // Refresh header
       const user = AuthModule.getUser();
       const nameEl = document.querySelector('.account-name');
       if (nameEl) nameEl.textContent = user.name;
       alert('已保存！');
     }
-  }
+  },
+
+  /**
+   * Render favorites / wishlist
+   */
+  async _renderFavorites() {
+    const container = document.getElementById('account-content');
+    if (!container) return;
+
+    const favIds = FavoritesModule.getIds();
+
+    container.innerHTML = `
+    <div class="section-header" style="display:flex;align-items:center;gap:var(--space-sm);margin-bottom:var(--space-md);">
+      <button class="btn btn--icon" id="btn-back-menu" style="font-size:20px;">←</button>
+      <h2 style="font-size:var(--text-lg);">我的收藏 ❤️</h2>
+      <span style="margin-left:auto;font-size:var(--text-sm);color:var(--text-muted);">${favIds.length} 本</span>
+    </div>`;
+
+    if (favIds.length === 0) {
+      container.innerHTML += `
+      <div class="order-empty">
+        <div class="order-empty__icon">💝</div>
+        <p class="order-empty__text">还没有收藏任何漫画</p>
+        <button class="btn btn--primary" onclick="AppRouter.navigate('products')">
+          去逛逛
+        </button>
+      </div>`;
+    } else {
+      // Fetch product data for favorites
+      try {
+        const res = await fetch('data/products.json');
+        const data = await res.json();
+        const products = data.products || [];
+
+        const favProducts = favIds.map(id => products.find(p => p.id === id)).filter(Boolean);
+
+        container.innerHTML += `
+        <div class="product-listing-grid">
+          ${favProducts.map(p => this._renderFavCard(p)).join('')}
+        </div>`;
+
+        // Click handlers
+        container.querySelectorAll('.product-card').forEach(card => {
+          card.addEventListener('click', () => {
+            AppRouter.navigate('product', { id: card.dataset.productId });
+          });
+        });
+
+        // Remove from favorites
+        container.querySelectorAll('.btn-fav-remove').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            FavoritesModule.toggle(btn.dataset.productId);
+            this._renderFavorites();
+          });
+        });
+      } catch {
+        container.innerHTML += '<p style="text-align:center;color:var(--text-secondary);">加载失败</p>';
+      }
+    }
+
+    document.getElementById('btn-back-menu').addEventListener('click', () => {
+      this._view = 'menu';
+      this._renderMenu();
+    });
+  },
+
+  _renderFavCard(product) {
+    const catMap = {
+      shonen: '少年漫画', shojo: '少女漫画', seinen: '青年漫画',
+      classics: '经典收藏', 'new-releases': '熱門新作',
+    };
+    const catName = catMap[product.category_id] || '';
+
+    return `
+    <div class="product-card" data-product-id="${product.id}">
+      <div class="product-card__image--placeholder">${catName.charAt(0) || '📚'}</div>
+      <div class="product-card__body">
+        <div class="product-card__title">${Utils.escapeHTML(product.title_zh)}</div>
+        <div class="product-card__price">RM ${product.price.toFixed(2)}</div>
+        <button class="btn-fav-remove" data-product-id="${product.id}"
+                style="position:absolute;top:4px;right:4px;background:none;border:none;font-size:18px;cursor:pointer;padding:4px;">
+          ❌
+        </button>
+      </div>
+    </div>`;
+  },
 };

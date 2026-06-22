@@ -275,3 +275,14 @@
   .pdp-info { max-width: 768px; margin: -20px auto 0; border-radius: var(--radius-xl); }
   .pdp-sticky-bar { display: none; }
 }
+
+/* ═══════ Rating + Favorite Row ═══════ */
+.pdp-engagement {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) 0;
+  margin: var(--space-sm) 0;
+  border-top: 1px solid var(--border-glass);
+  border-bottom: 1px solid var(--border-glass);
+}

@@ -9,9 +9,10 @@ const OrdersModule = {
    * Create a new order from cart + customer info
    * @param {Object} customer - { name, phone, email, notes }
    * @param {string} region - 'west' | 'east'
+   * @param {string|null} userId - current user id if logged in
    * @returns {Object} Created order
    */
-  create(customer = {}, region = 'west') {
+  create(customer = {}, region = 'west', userId = null) {
     const items = CartModule.getItems();
     if (!items.length) throw new Error('购物车为空');
 
@@ -19,6 +20,7 @@ const OrdersModule = {
 
     const order = {
       id: 'ORD-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 6).toUpperCase(),
+      userId: userId || null,
       items: items.map(i => ({
         id: i.id,
         title_zh: i.title_zh,
@@ -37,10 +39,9 @@ const OrdersModule = {
       shipping: totals.shipping,
       total: totals.total,
       status: 'pending',
-      created_at: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
     };
 
-    // Save to localStorage order history
     this._saveToHistory(order);
 
     return order;
@@ -90,6 +91,23 @@ const OrdersModule = {
    */
   getHistory() {
     return Storage.get('orders', []);
+  },
+
+  /**
+   * Get orders for a specific user
+   * @param {string} userId
+   * @returns {Array}
+   */
+  getUserHistory(userId) {
+    return this.getHistory().filter(o => o.userId === userId);
+  },
+
+  /**
+   * Get all orders (alias for account page)
+   * @returns {Array}
+   */
+  getAll() {
+    return this.getHistory();
   },
 
   /**

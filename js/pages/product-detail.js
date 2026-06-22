@@ -86,6 +86,35 @@ const PageProductDetail = {
     const stickyBuy = document.getElementById('pdp-sticky-buy');
     if (stickyAdd) stickyAdd.addEventListener('click', () => this._addToCart());
     if (stickyBuy) stickyBuy.addEventListener('click', () => this._buyNow());
+
+    // Rating stars
+    this._renderStars();
+    document.querySelectorAll('#pdp-stars .star-rating__star--clickable').forEach(star => {
+      star.addEventListener('click', () => {
+        const rating = parseInt(star.dataset.rating);
+        const result = RatingsModule.rate(this._product.id, rating);
+        if (result.ok) {
+          this._renderStars();
+          Utils.toast(`已评分 ${rating}⭐`, 'success');
+        } else {
+          Utils.toast(result.error, 'error');
+        }
+      });
+    });
+
+    // Favorite button
+    const favBtn = document.getElementById('pdp-fav-btn');
+    if (favBtn) {
+      favBtn.addEventListener('click', () => {
+        const result = FavoritesModule.toggle(this._product.id);
+        if (result.ok) {
+          this._renderFavButton();
+          Utils.toast(result.favorited ? '已加入收藏 ❤️' : '已取消收藏', 'success');
+        } else {
+          Utils.toast(result.error, 'error');
+        }
+      });
+    }
   },
 
   _render() {
@@ -151,6 +180,12 @@ const PageProductDetail = {
         <div class="pdp-stock ${p.stock_status}">
           <span class="pdp-stock__dot ${p.stock_status}"></span>
           ${this._getStockText(p)}
+        </div>
+
+        <!-- Rating + Favorite Row -->
+        <div class="pdp-engagement">
+          <div class="star-rating" id="pdp-stars"></div>
+          <button class="btn-fav" id="pdp-fav-btn" aria-label="收藏">🤍</button>
         </div>
 
         <!-- Quantity + Actions -->
@@ -307,7 +342,6 @@ const PageProductDetail = {
   },
 
   _getCategoryName(catId) {
-    // Categories might not be loaded — use product data fallback
     const catMap = {
       shonen: '少年漫画',
       shojo: '少女漫画',
@@ -316,5 +350,50 @@ const PageProductDetail = {
       'new-releases': '熱門新作',
     };
     return catMap[catId] || '';
+  },
+
+  /**
+   * Render star rating UI
+   */
+  _renderStars() {
+    const container = document.getElementById('pdp-stars');
+    if (!container || !this._product) return;
+
+    const { average, count } = RatingsModule.getAverage(this._product.id);
+    const userRating = RatingsModule.getUserRating(this._product.id);
+    const canRate = AuthModule.isLoggedIn();
+
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+      const filled = i <= Math.round(average);
+      const clickable = canRate ? ' star-rating__star--clickable' : '';
+      html += `<span class="star-rating__star${filled ? ' star-rating__star--filled' : ''}${clickable}"
+                    data-rating="${i}">${filled ? '⭐' : '☆'}</span>`;
+    }
+
+    html += `<span class="star-rating__count">${average > 0 ? average + ' (' + count + ')' : '暂无评分'}</span>`;
+
+    if (userRating) {
+      html += `<span style="font-size:var(--text-xs);color:var(--primary);margin-left:var(--space-sm);">你的评分: ${userRating}⭐</span>`;
+    }
+
+    container.innerHTML = html;
+  },
+
+  /**
+   * Render favorite heart button
+   */
+  _renderFavButton() {
+    const btn = document.getElementById('pdp-fav-btn');
+    if (!btn) return;
+    const favorited = FavoritesModule.isFavorited(this._product.id);
+    btn.textContent = favorited ? '❤️' : '🤍';
+    if (favorited) {
+      btn.classList.add('btn-fav--active');
+      btn.setAttribute('aria-label', '取消收藏');
+    } else {
+      btn.classList.remove('btn-fav--active');
+      btn.setAttribute('aria-label', '收藏');
+    }
   },
 };

@@ -264,7 +264,7 @@ const PageCheckout = {
     document.getElementById('btn-step2-confirm')?.addEventListener('click', () => {
       this._step = 3;
       try {
-        this._order = OrdersModule.create(this._customer);
+        this._order = OrdersModule.create(this._customer, 'west', AuthModule.getUser()?.id || null);
         CartModule.clear();
         Nav.updateCartBadge();
       } catch (err) {

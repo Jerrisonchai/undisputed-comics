@@ -9,7 +9,7 @@ const Nav = {
     { id: 'home',   icon: '🏠', label: '首页' },
     { id: 'products', icon: '📂', label: '分类' },
     { id: 'cart',   icon: '🛒', label: '购物车' },
-    { id: 'account', icon: '👤', label: '我的' },
+    { id: 'account', icon: null, label: '我的' }, // icon set dynamically
   ],
 
   /**
@@ -22,6 +22,19 @@ const Nav = {
 
     // Listen for cart changes
     window.addEventListener('cart-updated', () => this._updateCartBadge());
+    // Listen for auth changes
+    window.addEventListener('user-changed', () => this._renderBottomNav());
+  },
+
+  /**
+   * Get account tab icon — user initial if logged in, default otherwise
+   */
+  _getAccountIcon() {
+    const user = AuthModule.isLoggedIn() ? AuthModule.getUser() : null;
+    if (user && user.name) {
+      return user.name.charAt(0).toUpperCase();
+    }
+    return '👤';
   },
 
   /**
@@ -70,9 +83,12 @@ const Nav = {
     const bottomNav = document.getElementById('bottom-nav');
     if (!bottomNav) return;
 
+    const accountIcon = this._getAccountIcon();
+    const isUserInit = accountIcon !== '👤';
+
     bottomNav.innerHTML = this._tabs.map(tab => `
       <button class="tab-btn" data-route="${tab.id}" aria-label="${tab.label}">
-        <span class="tab-icon-wrap">${tab.icon}</span>
+        <span class="tab-icon-wrap${isUserInit && tab.id === 'account' ? ' user-initial' : ''}">${tab.icon || accountIcon}</span>
         <span>${tab.label}</span>
         ${tab.id === 'cart' ? '<span class="cart-badge" id="cart-badge-bottom"></span>' : ''}
       </button>

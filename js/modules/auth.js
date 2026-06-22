@@ -87,6 +87,7 @@ const AuthModule = {
     this._user = null;
     Storage.remove('user_session');
     this._updateNavUI();
+    window.dispatchEvent(new CustomEvent('user-changed'));
     AppRouter.navigate('home');
   },
 
@@ -146,7 +147,8 @@ const AuthModule = {
    * Get all orders for current user (from localStorage)
    */
   getOrders() {
-    return OrdersModule.getAll();
+    if (!this._user) return [];
+    return OrdersModule.getUserHistory(this._user.id);
   },
 
   /* ── Private ── */
@@ -158,6 +160,7 @@ const AuthModule = {
     this._user = session;
     Storage.set('user_session', session);
     this._updateNavUI();
+    window.dispatchEvent(new CustomEvent('user-changed'));
   },
 
   _updateNavUI() {
