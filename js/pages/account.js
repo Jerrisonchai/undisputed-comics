@@ -70,11 +70,12 @@ const PageAccount = {
     this._renderMenu();
   },
 
-  _renderMenu() {
+  async _renderMenu() {
     const container = document.getElementById('account-content');
     if (!container) return;
 
-    const orderCount = AuthModule.getOrders().length;
+    const orders = await AuthModule.getOrders();
+    const orderCount = orders.length;
     const favCount = FavoritesModule.count();
 
     container.innerHTML = `
@@ -104,11 +105,11 @@ const PageAccount = {
     </div>`;
   },
 
-  _renderOrders() {
+  async _renderOrders() {
     const container = document.getElementById('account-content');
     if (!container) return;
 
-    const orders = AuthModule.getOrders();
+    const orders = await AuthModule.getOrders();
 
     if (orders.length === 0) {
       container.innerHTML = `

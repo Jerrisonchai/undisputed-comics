@@ -261,12 +261,27 @@ const PageCheckout = {
       this._reRender();
     });
 
-    document.getElementById('btn-step2-confirm')?.addEventListener('click', () => {
+    document.getElementById('btn-step2-confirm')?.addEventListener('click', async () => {
       this._step = 3;
       try {
         this._order = OrdersModule.create(this._customer, 'west', AuthModule.getUser()?.id || null);
         CartModule.clear();
         Nav.updateCartBadge();
+
+        // Also save to Supabase
+        if (API.isReady()) {
+          API.createOrder({
+            userId: AuthModule.getUser()?.id || null,
+            name: this._customer.name,
+            phone: this._customer.phone,
+            email: this._customer.email,
+            address: '',
+            subtotal: this._order.subtotal,
+            shipping: this._order.shipping,
+            total: this._order.total,
+            items: this._order.items,
+          }).catch(() => {}); // Fire-and-forget — local save already done
+        }
       } catch (err) {
         Utils.toast('创建订单失败，请重试', 'error');
         console.error('Order creation failed:', err);
