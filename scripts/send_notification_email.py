@@ -129,7 +129,7 @@ def main():
         resp = supabase.table("notification_logs") \
             .select("*") \
             .eq("status", "pending") \
-            .order("created_at", {"ascending": True}) \
+            .order("created_at") \
             .limit(MAX_PER_RUN) \
             .execute()
         pending = resp.data or []

@@ -127,7 +127,7 @@ const AdminRouter = {
   /**
    * Navigate to a route and render the page
    */
-  navigate(route, params) {
+  navigate: async function(route, params) {
     this._currentRoute = route;
 
     // Update URL hash
