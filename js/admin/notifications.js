@@ -12,13 +12,19 @@ const AdminNotifications = {
 
     content.innerHTML = '<div class="admin-spinner">⏳ 加载通知面板…</div>';
 
-    const [subCount, recentLogs] = await Promise.all([
-      EmailModule.getSubscriberCount(),
-      EmailModule.getLogs(10),
-    ]);
+    try {
+      const [subCount, recentLogs] = await Promise.all([
+        EmailModule.getSubscriberCount(),
+        EmailModule.getLogs(10),
+      ]);
+      this._subCount = subCount;
+      this._recentLogs = recentLogs;
+    } catch (err) {
+      console.error('Notifications load error:', err);
+      this._subCount = 0;
+      this._recentLogs = [];
+    }
 
-    this._subCount = subCount;
-    this._recentLogs = recentLogs;
     this._drawPanel();
   },
 
@@ -146,6 +152,11 @@ const AdminNotifications = {
   async _loadSubscribers() {
     const list = document.getElementById('subscriber-list');
     if (!list) return;
+
+    if (typeof EmailModule === 'undefined') {
+      list.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><p>邮件模块未加载</p></div>';
+      return;
+    }
 
     const subs = await EmailModule.getSubscribers(false);
     if (!subs.length) {
