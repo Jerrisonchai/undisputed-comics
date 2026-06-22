@@ -254,6 +254,36 @@
   padding: var(--space-xl);
 }
 
+.about-section--poetic {
+  text-align: center;
+  background: linear-gradient(135deg, #FFF5F5, #FFF7ED, #FFFBEB);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) var(--space-md);
+}
+.about-poem {
+  font-size: 18px;
+  line-height: 2;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-xs);
+}
+.about-poem--accent {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--primary);
+}
+.about-poem--en {
+  font-size: 16px;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+.about-poem__divider {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  border: none;
+  margin: var(--space-md) auto;
+}
+
 .about-values {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -563,5 +593,6 @@
 [data-theme="dark"] .footer-info { background: #1e293b; border-color: #334155; }
 [data-theme="dark"] .info-section h2 { border-color: var(--primary); }
 [data-theme="dark"] .about-section--cta { background: #1e293b; }
+[data-theme="dark"] .about-section--poetic { background: linear-gradient(135deg, #1a1a2e, #16213e, #1e1b2e); }
 [data-theme="dark"] .contact-card--whatsapp { background: rgba(220,248,198,0.1); border-color: #4ade80; }
 [data-theme="dark"] .contact-card--email { background: rgba(147,197,253,0.1); border-color: #60a5fa; }

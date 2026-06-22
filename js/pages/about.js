@@ -40,6 +40,20 @@ const PageAbout = {
           <p>从《海贼王》到《咒术迴战》，从经典港漫到最新日漫译本，我们精心挑选每一本漫画，确保它们以最好的状态送到您手中。</p>
         </section>
 
+        <section class="about-section about-section--poetic">
+          <p class="about-poem">谢谢还喜欢看漫画的你，感谢你。🌸</p>
+          <p class="about-poem">欢迎询问邮寄详情和查看是否有现货。</p>
+          <p class="about-poem">旨在为世界各地的书友带来文学气息。</p>
+          <p class="about-poem">购买您最喜欢的书籍。</p>
+          <p class="about-poem">让你在阅读时代中体验每个多姿多彩的盛开岁月。</p>
+          <p class="about-poem about-poem--accent">偶尔也有利落悦耳的翻页声。📖</p>
+          <hr class="about-poem__divider">
+          <p class="about-poem about-poem--en">Aiming to bring literary atmosphere to book lovers everywhere.</p>
+          <p class="about-poem about-poem--en">Shop your favorite books.</p>
+          <p class="about-poem about-poem--en">Let you experience every colorful blooming moment in the reading garden.</p>
+          <p class="about-poem about-poem--en about-poem--accent">Occasionally, there is a melodious page-turning sound. 📄</p>
+        </section>
+
         <section class="about-section">
           <h2>🎯 我们的使命</h2>
           <div class="about-values">

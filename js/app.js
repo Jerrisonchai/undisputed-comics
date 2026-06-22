@@ -256,6 +256,7 @@ const AppRouter = {
 /**
  * App entry point — fires on DOMContentLoaded
  */
+window.AppRouter = AppRouter;
 document.addEventListener('DOMContentLoaded', () => {
   AppRouter.init();
 });
