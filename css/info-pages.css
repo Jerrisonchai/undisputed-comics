@@ -471,6 +471,35 @@
 }
 .faq-input-bar__send:active { transform: scale(0.9); }
 
+/* ═══════ Typing Indicator ═══════ */
+.faq-typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg) !important;
+  min-width: 60px;
+}
+.faq-typing__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-disabled);
+  animation: faqTypingBounce 1.4s var(--spring-slow) infinite;
+}
+.faq-typing__dot:nth-child(2) { animation-delay: 0.2s; }
+.faq-typing__dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes faqTypingBounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+}
+
 /* ═══════ Footer Info Links ═══════ */
 .footer-info {
   padding: var(--space-lg) var(--space-md);

@@ -23,7 +23,7 @@ const PageFAQ = {
       {
         keywords: ['付款', '支付', '钱', 'bank', '转账', 'ewallet', 'tng', 'touch'],
         question: '如何付款？',
-        answer: '我们接受以下付款方式：\n\n🏦 <strong>银行转账</strong>（Maybank / CIMB / Public Bank）\n📱 <strong>Touch 'n Go eWallet</strong>\n\n下单后我们会通过 WhatsApp 发送付款详情。'
+        answer: '我们接受以下付款方式：\n\n🏦 <strong>银行转账</strong>（Maybank / CIMB / Public Bank）\n📱 <strong>Touch \'n Go eWallet</strong>\n\n下单后我们会通过 WhatsApp 发送付款详情。'
       },
       {
         keywords: ['退货', '退款', '换货', '退钱', '损坏', 'refund', 'return'],
@@ -157,11 +157,18 @@ const PageFAQ = {
     // Find best match
     const answer = this._findAnswer(question);
 
-    // Simulate typing delay
+    // Show typing indicator
+    const typingEl = this._addTypingIndicator();
+    this._scrollChat();
+
+    // Simulate realistic typing delay
+    const delay = 600 + Math.min(answer.length * 15, 2000) + Math.random() * 600;
     setTimeout(() => {
+      // Remove typing indicator
+      typingEl?.remove();
       this._addMessage('bot', answer);
       this._scrollChat();
-    }, 500 + Math.random() * 800);
+    }, delay);
   },
 
   _findAnswer(query) {
@@ -205,5 +212,23 @@ const PageFAQ = {
   _scrollChat() {
     const chat = document.getElementById('faq-chat');
     if (chat) chat.scrollTop = chat.scrollHeight;
+  },
+
+  _addTypingIndicator() {
+    const chat = document.getElementById('faq-chat');
+    if (!chat) return null;
+
+    const el = document.createElement('div');
+    el.className = 'faq-msg faq-msg--bot faq-msg--typing';
+    el.innerHTML = `
+      <div class="faq-msg__avatar">🤖</div>
+      <div class="faq-msg__bubble faq-typing">
+        <span class="faq-typing__dot"></span>
+        <span class="faq-typing__dot"></span>
+        <span class="faq-typing__dot"></span>
+      </div>
+    `;
+    chat.appendChild(el);
+    return el;
   },
 };
