@@ -70,10 +70,15 @@ const AdminAuth = {
     if (!sb) return { ok: false, error: 'Supabase 未初始化' };
 
     try {
+      console.log('[AdminAuth] Attempting login:', email);
       const { data, error } = await sb.auth.signInWithPassword({ email, password });
-      if (error) return { ok: false, error: this._translateError(error.message) };
+      if (error) {
+        console.error('[AdminAuth] SignIn error:', error.message);
+        return { ok: false, error: this._translateError(error.message) };
+      }
 
       this._user = data.user;
+      console.log('[AdminAuth] Signed in, user ID:', this._user.id);
 
       // Check role — auto-create profile if missing (same as checkAuth)
       const { data: profile, error: profileErr } = await sb
@@ -81,6 +86,8 @@ const AdminAuth = {
         .select('role')
         .eq('id', this._user.id)
         .maybeSingle();
+
+      console.log('[AdminAuth] Profile query:', { profile, error: profileErr });
 
       let isAdmin = profile?.role === 'admin';
 
@@ -98,11 +105,13 @@ const AdminAuth = {
       }
 
       if (!isAdmin) {
+        console.log('[AdminAuth] Not admin, signing out');
         await sb.auth.signOut();
         this._user = null;
         return { ok: false, error: '无管理权限。仅限管理员登录。' };
       }
 
+      console.log('[AdminAuth] Admin login SUCCESS');
       this._isAdmin = true;
       return { ok: true, user: this._user };
     } catch (err) {

@@ -47,19 +47,25 @@ const AdminRouter = {
       const loginBtn = document.querySelector('#admin-login-form button[type="submit"]');
       loginBtn.disabled = true;
       loginBtn.textContent = '登录中…';
+      errorEl.style.display = 'none';
 
-      const result = await AdminAuth.login(email, password);
-
-      if (result.ok) {
-        errorEl.style.display = 'none';
-        // Reload to show admin layout
-        location.reload();
-      } else {
-        errorEl.textContent = result.error;
+      try {
+        const result = await AdminAuth.login(email, password);
+        if (result.ok) {
+          errorEl.style.display = 'none';
+          location.reload();
+        } else {
+          errorEl.textContent = result.error || '登录失败';
+          errorEl.style.display = 'block';
+        }
+      } catch (err) {
+        console.error('Login exception:', err);
+        errorEl.textContent = '发生错误: ' + (err.message || '未知错误');
         errorEl.style.display = 'block';
-        loginBtn.disabled = false;
-        loginBtn.textContent = '登入控制台';
       }
+
+      loginBtn.disabled = false;
+      loginBtn.textContent = '登入控制台';
     });
   },
 
