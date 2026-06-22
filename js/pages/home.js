@@ -252,6 +252,7 @@ const PageHome = {
       </div>
       <div class="footer-bottom">
         ${Utils.escapeHTML(this._copy?.footer?.copyright || '© 2026 金牌漫画 版权所有')}
+        <br><span class="footer-version">v${window.AppConfig?.version || '2.1.4'}</span>
       </div>
     </footer>`;
   },

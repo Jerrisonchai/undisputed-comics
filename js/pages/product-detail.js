@@ -192,6 +192,14 @@ const PageProductDetail = {
         <div class="scroll-x" id="related-scroll"></div>
       </div>
 
+      <!-- Quick Nav (product detail page bottom) -->
+      <div class="pdp-quick-nav">
+        <button class="btn btn--glass" onclick="AppRouter.navigate('home')">🏠 首页</button>
+        <button class="btn btn--glass" onclick="AppRouter.navigate('products')">📂 分类</button>
+        <button class="btn btn--glass" onclick="AppRouter.navigate('cart')">🛒 购物车</button>
+        <button class="btn btn--glass" onclick="AppRouter.navigate('account')">👤 我的</button>
+      </div>
+
       <!-- Sticky Add Bar (mobile only) -->
       ${canBuy ? `
       <div class="pdp-sticky-bar">

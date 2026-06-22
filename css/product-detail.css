@@ -231,6 +231,23 @@
   padding: var(--space-xs) 0 var(--space-sm);
 }
 
+/* ═══════ Quick Nav (product detail bottom) ═══════ */
+.pdp-quick-nav {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--page-padding);
+  margin: var(--space-md) 0;
+}
+
+.pdp-quick-nav .btn--glass {
+  flex: 1;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  padding: var(--space-sm) var(--space-sm);
+  justify-content: center;
+  min-width: 0;
+}
+
 /* ═══════ Sticky Add Bar (mobile) ═══════ */
 .pdp-sticky-bar {
   position: fixed;

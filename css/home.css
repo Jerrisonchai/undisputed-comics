@@ -390,9 +390,16 @@
   color: var(--text-disabled);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   RESPONSIVE
-   ═══════════════════════════════════════════════════════════ */
+.footer-version {
+  font-size: 12px;
+  color: var(--text-disabled);
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  letter-spacing: 1px;
+  margin-top: 4px;
+  display: inline-block;
+}
+
+/* ═══════════ RESPONSIVE ═══════════ */
 @media (min-width: 480px) {
   .hero { min-height: 320px; }
   .hero__tagline { font-size: 36px; }

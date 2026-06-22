@@ -82,6 +82,17 @@
   white-space: nowrap;
   flex-shrink: 0;
   letter-spacing: 1px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity var(--duration-fast) ease;
+}
+
+#top-nav .nav-logo:active {
+  opacity: 0.7;
 }
 
 #top-nav .nav-logo img {
@@ -127,6 +138,7 @@
   padding: 0 5px;
   line-height: 1;
   box-shadow: 0 2px 8px var(--primary-glow);
+  pointer-events: none; /* Clicks pass through to parent button */
 }
 
 .cart-badge:empty { display: none; }

@@ -454,6 +454,20 @@ em, i { font-style: normal; font-weight: 500; }
   #aurora-bg .blob:nth-child(2) { background: rgba(167,139,250,0.08); opacity: 0.35; }
   #aurora-bg .blob:nth-child(3) { background: rgba(78,205,196,0.06); opacity: 0.35; }
   #aurora-bg .blob:nth-child(4) { background: rgba(255,217,61,0.05); opacity: 0.30; }
+
+  /* Hero section — keep bright background, text stays dark */
+  .hero,
+  .hero__tagline,
+  .hero__subtitle,
+  .hero__content {
+    color: #2D3748;
+  }
+
+  /* Footer — slightly muted on dark bg */
+  .site-footer,
+  .site-footer .footer-bottom {
+    color: var(--text-secondary);
+  }
 }
 
 /* Smooth transition when switching themes */
