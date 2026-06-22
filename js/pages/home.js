@@ -328,16 +328,15 @@ const PageHome = {
     const btn = document.getElementById('btn-subscribe');
     const input = document.getElementById('subscribe-email');
     if (btn && input) {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         const email = input.value.trim();
         if (!email || !Utils.isValidEmail(email)) {
           Utils.toast('请输入有效的电子邮箱', 'error');
           return;
         }
-        // Phase 8: Supabase insert
-        Storage.set('subscribe_email', email);
+        const result = await EmailModule.subscribe(email);
         input.value = '';
-        Utils.toast('订阅成功！感谢您的关注。');
+        Utils.toast(result.message || '订阅成功！感谢您的关注。', result.ok ? 'success' : 'error');
       });
     }
   },

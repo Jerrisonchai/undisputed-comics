@@ -44,6 +44,9 @@ const OrdersModule = {
 
     this._saveToHistory(order);
 
+    // Phase 6: Queue order confirmation email
+    this._queueOrderConfirmation(order);
+
     return order;
   },
 
@@ -155,6 +158,48 @@ const OrdersModule = {
       order.status = status;
       order.updated_at = new Date().toISOString();
       Storage.set('orders', history);
+
+      // Phase 6: Queue shipping notification
+      if (status === 'shipped' && order.customer?.email) {
+        const itemsList = (order.items || []).map(i => `${i.qty}x ${i.title_zh}`).join(', ');
+        EmailModule.queueNotification({
+          type: 'shipped',
+          recipient_email: order.customer.email,
+          recipient_name: order.customer.name,
+          subject: `📦 您的订单已发货！${order.id}`,
+          body_html: `<p>${order.customer.name || '您好'}，您好！</p>
+<p>您的订单 <strong>${order.id}</strong> 已发货。</p>
+<p><strong>订单内容：</strong>${itemsList}</p>
+<p><strong>订单金额：</strong>RM${parseFloat(order.total).toFixed(2)}</p>
+<p>预计 2-7 个工作日送达。如有问题，请通过 WhatsApp 联系我们。</p>
+<p>感谢您在金牌漫画购物！📚</p>`,
+          order_id: order.id,
+        }).catch(() => {});
+      }
     }
+  },
+
+  /**
+   * Queue order confirmation email (Phase 6)
+   */
+  _queueOrderConfirmation(order) {
+    if (!order.customer?.email) return;
+
+    const itemsList = (order.items || []).map(i => `${i.qty}x ${i.title_zh}`).join(', ');
+    EmailModule.queueNotification({
+      type: 'order',
+      recipient_email: order.customer.email,
+      recipient_name: order.customer.name,
+      subject: `🛒 订单确认 — ${order.id}`,
+      body_html: `<p>${order.customer.name || '您好'}，您好！</p>
+<p>感谢您在 <strong>金牌漫画</strong> 下单！</p>
+<p><strong>订单编号：</strong>${order.id}</p>
+<p><strong>订单内容：</strong>${itemsList}</p>
+<p><strong>订单金额：</strong>RM${parseFloat(order.total).toFixed(2)}</p>
+<p>我们会在确认付款后 24 小时内发货。发货后会通过邮件和 WhatsApp 通知您。</p>
+<p>如有任何问题，欢迎 WhatsApp 联系。</p>
+<p>感谢您的支持！📚</p>`,
+      order_id: order.id,
+    }).catch(() => {});
   },
 };

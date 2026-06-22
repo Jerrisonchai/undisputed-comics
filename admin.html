@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
   <title>金牌漫画 · Admin</title>
-  <link rel="stylesheet" href="css/admin.css?v=3">
+  <link rel="stylesheet" href="css/admin.css?v=4">
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -56,6 +56,9 @@
           <a class="admin-nav__item" href="#settings" data-route="settings">
             <span class="admin-nav__icon">⚙️</span> 设置
           </a>
+          <a class="admin-nav__item" href="#notifications" data-route="notifications">
+            <span class="admin-nav__icon">📧</span> 邮件通知
+          </a>
         </nav>
         <div class="admin-sidebar__footer">
           <button class="btn btn--ghost" id="admin-logout" style="width:100%;color:var(--text-secondary);">🚪 退出</button>
@@ -80,15 +83,16 @@
   </div>
 
   <!-- Scripts -->
-  <script src="js/config.js?v=3"></script>
-  <script src="js/lib/utils.js?v=3"></script>
+  <script src="js/config.js?v=4"></script>
+  <script src="js/lib/utils.js?v=4"></script>
   <script src="js/lib/api.js?v=17"></script>
-  <script src="js/admin/admin-auth.js?v=3"></script>
-  <script src="js/admin/dashboard.js?v=3"></script>
-  <script src="js/admin/products-manage.js?v=3"></script>
-  <script src="js/admin/orders-manage.js?v=3"></script>
-  <script src="js/admin/media.js?v=3"></script>
-  <script src="js/admin/settings.js?v=3"></script>
-  <script src="js/admin/admin-app.js?v=3"></script>
+  <script src="js/admin/admin-auth.js?v=4"></script>
+  <script src="js/admin/dashboard.js?v=4"></script>
+  <script src="js/admin/products-manage.js?v=4"></script>
+  <script src="js/admin/orders-manage.js?v=4"></script>
+  <script src="js/admin/media.js?v=4"></script>
+  <script src="js/admin/settings.js?v=4"></script>
+  <script src="js/admin/notifications.js?v=4"></script>
+  <script src="js/admin/admin-app.js?v=4"></script>
 </body>
 </html>

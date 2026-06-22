@@ -140,6 +140,7 @@ const AdminRouter = {
       orders: '订单管理',
       media: '媒体库',
       settings: '设置',
+      notifications: '邮件通知',
     };
     const titleEl = document.getElementById('admin-page-title');
     if (titleEl) titleEl.textContent = titles[route] || route;
@@ -160,6 +161,10 @@ const AdminRouter = {
         break;
       case 'settings':
         AdminSettings.render();
+        break;
+
+      case 'notifications':
+        await AdminNotifications.render();
         break;
       default:
         AdminDashboard.render();

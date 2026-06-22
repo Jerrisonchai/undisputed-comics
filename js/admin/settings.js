@@ -110,6 +110,14 @@ const AdminSettings = {
               <span class="form-group__help">订单满此金额免运费</span>
             </div>
 
+            <h4 style="margin:24px 0 12px;color:#4a5568;font-size:14px;">📧 邮件通知</h4>
+            <div class="form-group">
+              <label class="form-group__label" for="set-notif-email">发送邮箱 (From)</label>
+              <input class="form-group__input" type="email" id="set-notif-email"
+                     value="${this._esc(s.notification_from_email || 'jerrcoc1@gmail.com')}" placeholder="jerrcoc1@gmail.com">
+              <span class="form-group__help">系统通知邮件将从该邮箱发出（需要 Gmail 应用密码，已在服务器端配置）</span>
+            </div>
+
             <h4 style="margin:24px 0 12px;color:#4a5568;font-size:14px;">🎛️ 功能开关</h4>
             <div style="display:flex;gap:24px;align-items:center;flex-wrap:wrap;">
               <div style="display:flex;align-items:center;gap:8px;">
@@ -152,6 +160,7 @@ const AdminSettings = {
       shipping_west: document.getElementById('set-ship-west').value,
       shipping_east: document.getElementById('set-ship-east').value,
       free_shipping: document.getElementById('set-free-ship').value,
+      notification_from_email: document.getElementById('set-notif-email').value.trim(),
       coupons_enabled: document.getElementById('set-coupons').checked ? 'true' : 'false',
       points_enabled: document.getElementById('set-points').checked ? 'true' : 'false',
     };

@@ -150,6 +150,26 @@ create table if not exists site_settings (
 insert into site_settings (id) values (1) on conflict do nothing;
 
 -- ============================================================
+-- 11. NOTIFICATION LOGS TABLE (Phase 6)
+-- ============================================================
+create table if not exists notification_logs (
+  id               bigint generated always as identity primary key,
+  type             text not null default 'manual', -- 'welcome','order','shipped','bulk','manual'
+  recipient_email  text not null,
+  recipient_name   text,
+  subject          text not null,
+  body_html        text not null,
+  order_id         text,           -- FK to orders (nullable)
+  status           text not null default 'pending', -- 'pending','sent','failed'
+  error_message    text,
+  sent_at          timestamptz,
+  created_at       timestamptz not null default now()
+);
+
+-- Add notification_from_email to site_settings
+alter table site_settings add column if not exists notification_from_email text default 'jerrcoc1@gmail.com';
+
+-- ============================================================
 -- ROW-LEVEL SECURITY
 -- ============================================================
 
@@ -161,7 +181,7 @@ alter table ratings enable row level security;
 alter table favorites enable row level security;
 alter table coupons enable row level security;
 alter table subscribers enable row level security;
-alter table site_settings enable row level security;
+alter table notification_logs enable row level security;
 
 -- Products: anyone can read, only authenticated can write (admin check later)
 create policy "Products are viewable by everyone" on products
@@ -268,6 +288,14 @@ create policy "Admins manage coupons" on coupons
 -- Subscribers: admin can view
 create policy "Admins view subscribers" on subscribers
   for select using (is_admin());
+
+-- Notification logs: admin can read/write
+create policy "Admins manage notification_logs" on notification_logs
+  for all using (is_admin()) with check (is_admin());
+
+-- Notification logs: public queue access (for order confirmation, welcome)
+create policy "Anyone can insert notification_logs" on notification_logs
+  for insert with check (true);
 
 -- Profiles: admin can view all (for customer management)
 create policy "Admins view all profiles" on profiles

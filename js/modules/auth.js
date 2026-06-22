@@ -75,6 +75,22 @@ const AuthModule = {
             updated_at: new Date().toISOString(),
           });
         } catch {}
+        // Phase 6: Queue welcome email
+        EmailModule.queueNotification({
+          type: 'welcome',
+          recipient_email: data.email,
+          recipient_name: data.name,
+          subject: '🎉 欢迎加入金牌漫画！',
+          body_html: `<p>${data.name || '您好'}，您好！</p>
+<p>欢迎加入 <strong>金牌漫画</strong> 大家庭！🎊</p>
+<p>感谢您注册成为我们的会员。在金牌漫画，您可以：</p>
+<p>✅ 浏览最新正版中文漫画<br>
+✅ 收藏您喜欢的书籍<br>
+✅ 查看订单历史和状态<br>
+✅ 第一个知道新书上架和优惠活动</p>
+<p>现在就开始您的漫画之旅吧！📚</p>
+<p>如有任何问题，欢迎 WhatsApp 联系。</p>`,
+        }).catch(() => {});
         return { ok: true };
       }
       return result;
@@ -220,6 +236,16 @@ const AuthModule = {
     users.push(newUser);
     Storage.set('users', users);
     this._setSession({ id: newUser.id, email: newUser.email, name: newUser.name, phone: '', address: '' });
+    // Phase 6: Welcome email (no-op if Supabase is down)
+    EmailModule.queueNotification({
+      type: 'welcome',
+      recipient_email: newUser.email,
+      recipient_name: newUser.name,
+      subject: '🎉 欢迎加入金牌漫画！',
+      body_html: `<p>${newUser.name || '您好'}，您好！</p>
+<p>欢迎加入 <strong>金牌漫画</strong> 大家庭！🎊</p>
+<p>感谢您注册成为我们的会员。现在就开始您的漫画之旅吧！📚</p>`,
+    }).catch(() => {});
     return { ok: true };
   },
 

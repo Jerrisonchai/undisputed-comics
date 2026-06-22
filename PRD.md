@@ -627,6 +627,9 @@ Toggle settings stored in `site_settings` table. UI elements conditionally rende
 | 11 | **Dark mode toggle (planned)** | CSS custom properties + `[data-theme="dark"]` selector. Toggle persists to localStorage, respects `prefers-color-scheme`. See Section 16 for full palette. |
 | 12 | **Brand manifesto added to About page** | Founder's friend poetic quotes define core brand values: gratitude to readers, literary atmosphere, page-turning sound. Bilingual (Chinese + English). See Section 1.3. |
 | 13 | **Phases 6-9 reordered (v2.6.2)** | Email + Copywriting prioritized ahead of Coupons + Points. Coupons and Points deferred — less critical for MVP launch, harder to implement, greater admin burden. New order: 6=Email, 7=Copywriting, 8=Coupons, 9=Points, 10=PWA+APK. |
+| 14 | **Email: Gmail SMTP primary, Resend backup** | `jerrcoc1@gmail.com` + app password (already proven with Personal Growth cron). Python cron script `send_notification_email.py` every 5min reads `notification_logs` table, sends via Gmail SMTP, marks sent. No SMTP credentials in browser. Resend API on standby if Gmail limit (500/day) hit. |
+| 15 | **Email: Notification types (v2.7)** | 5 types — (1) Welcome on registration, (2) Order confirmation auto, (3) Order shipped (admin triggers), (4) New Arrivals bulk push (admin composes), (5) Promo Blast bulk (admin composes). Admin `notification_from_email` configurable via Settings. |
+| 16 | **Email: Admin panel** | New "邮件通知" sidebar tab. Three sub-tabs: Compose (subject + body + preview + send to all subscribers), Log (sent/failed/pending table), Subscribers (list with active/cancelled status). |
 
 ---
 
