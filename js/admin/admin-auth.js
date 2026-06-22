@@ -32,12 +32,12 @@ const AdminAuth = {
 
       this._user = session.user;
 
-      // Check admin role in profiles table
-      const { data: profile } = await sb
+      // Check admin role in profiles table (use maybeSingle to avoid error on empty)
+      const { data: profile, error: profileErr } = await sb
         .from('profiles')
         .select('role')
         .eq('id', this._user.id)
-        .single();
+        .maybeSingle();
 
       this._isAdmin = profile?.role === 'admin';
 
@@ -75,14 +75,29 @@ const AdminAuth = {
 
       this._user = data.user;
 
-      // Check role
-      const { data: profile } = await sb
+      // Check role — auto-create profile if missing (same as checkAuth)
+      const { data: profile, error: profileErr } = await sb
         .from('profiles')
         .select('role')
         .eq('id', this._user.id)
-        .single();
+        .maybeSingle();
 
-      if (profile?.role !== 'admin') {
+      let isAdmin = profile?.role === 'admin';
+
+      // If profile doesn't exist, auto-create it for admin email
+      if (!profile && !profileErr) {
+        isAdmin = (this._user.email === 'jerrcoc1@gmail.com');
+        const role = isAdmin ? 'admin' : 'customer';
+        await sb.from('profiles').upsert({
+          id: this._user.id,
+          name: this._user.email?.split('@')[0] || '读者',
+          email: this._user.email,
+          role: role,
+          updated_at: new Date().toISOString(),
+        });
+      }
+
+      if (!isAdmin) {
         await sb.auth.signOut();
         this._user = null;
         return { ok: false, error: '无管理权限。仅限管理员登录。' };
@@ -91,6 +106,7 @@ const AdminAuth = {
       this._isAdmin = true;
       return { ok: true, user: this._user };
     } catch (err) {
+      console.error('Admin login error:', err);
       return { ok: false, error: '登录失败，请检查网络连接' };
     }
   },
