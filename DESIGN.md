@@ -28,52 +28,62 @@ That's the feeling we're building digitally.
 
 ## 2. COLOR SYSTEM
 
+> **⚠️ Design Pivot (2026-06-22):** Original gold/navy palette replaced by vibrant coral pink + aurora glassmorphism for a more energetic, modern brand feel. See main.css for authoritative tokens.
+
 ### 2.1 Palette
 
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `--gold-primary` | `#C8962E` | Primary CTAs, price text, badges, active states |
-| `--gold-light` | `#E8D5A3` | Subtle highlights, card borders on hover |
-| `--gold-dark` | `#8B6914` | Text on gold backgrounds |
-| `--red-accent` | `#C41E3A` | Sale badges, limited stock, urgency |
-| `--red-light` | `#FDE8EC` | Sale badge background |
-| `--navy-header` | `#1A1F36` | Top bar, bottom nav, section headers |
-| `--navy-light` | `#2D3351` | Hover states on dark backgrounds |
-| `--bg-warm` | `#FAF8F5` | Page background (warm paper feel) |
-| `--bg-white` | `#FFFFFF` | Card backgrounds |
-| `--text-primary` | `#1A1A1A` | Body text, product titles |
-| `--text-secondary` | `#6B6B6B` | Publisher names, metadata, timestamps |
-| `--text-disabled` | `#B0B0B0` | Disabled buttons, placeholder text |
-| `--border-light` | `#E8E5E0` | Card borders, dividers |
-| `--success-green` | `#2E7D32` | In-stock badge, success messages |
-| `--success-bg` | `#E8F5E9` | Stock badge background |
-| `--warning-orange` | `#E65100` | Low stock warning |
+| Token | Hex / Value | Usage |
+|-------|-------------|-------|
+| `--primary` | `#FF6B6B` | Primary CTAs, price text, active states, cart badge |
+| `--primary-hover` | `#FF5252` | Button hover |
+| `--primary-light` | `#FFE0E0` | Badge backgrounds, hover highlights |
+| `--primary-glow` | `rgba(255,107,107,0.25)` | Button shadows |
+| `--secondary` | `#A78BFA` | Accent elements, secondary CTAs |
+| `--secondary-light` | `#EDE9FE` | Secondary light backgrounds |
+| `--accent` | `#4ECDC4` | Success states, done indicators |
+| `--accent-light` | `#D1FAE5` | Success backgrounds |
+| `--coral` | `#FF8787` | Urgency, sale badges |
+| `--peach` | `#FFD93D` | Highlights |
+| `--sky` | `#74C0FC` | Info badges |
+| `--mint` | `#69DB7C` | Stock badges |
+| `--bg-primary` | `#FFF5F5` | Page background (warm pink tint) |
+| `--bg-gradient` | pink → purple → mint gradient | Aurora page background |
+| `--bg-card` | `rgba(255,255,255,0.72)` | Frosted glass cards |
+| `--bg-glass` | `rgba(255,255,255,0.55)` | Modal overlays |
+| `--glass-bg-strong` | `rgba(255,255,255,0.85)` | Top/bottom nav glass |
+| `--text-primary` | `#2D3748` | Body text, product titles |
+| `--text-secondary` | `#718096` | Publisher names, metadata |
+| `--text-disabled` | `#CBD5E0` | Placeholder, disabled |
+| `--border-light` | `rgba(0,0,0,0.06)` | Card borders |
+| `--border-glass` | `rgba(255,255,255,0.6)` | Glass borders |
+| `--divider` | `rgba(0,0,0,0.05)` | Section dividers |
 
 ### 2.2 Color Usage Map
 
 ```
 ┌─────────────────────────────────────────┐
-│ Top Nav Bar: --navy-header background   │
-│ Logo: --gold-primary                    │
-│ Search icon: --text-secondary           │
+│ Top Nav Bar: glass-bg-strong + blur     │
+│ Logo: --primary (coral pink)            │
+│ Search/Cart icons: --text-secondary     │
 ├─────────────────────────────────────────┤
-│ Page BG: --bg-warm                      │
+│ Page BG: --bg-gradient (aurora blobs)   │
 │                                         │
-│ ┌── Card ──────────────────────────┐   │
-│ │ bg: --bg-white                    │   │
-│ │ border: --border-light            │   │
-│ │ shadow: 0 2px 8px rgba(0,0,0,.08) │   │
+│ ┌── Glass Card ────────────────────┐   │
+│ │ bg: --bg-card (frosted glass)     │   │
+│ │ backdrop-filter: blur(20px)       │   │
+│ │ border: --border-glass            │   │
+│ │ shadow: --shadow-card (pink tint) │   │
 │ │                                   │   │
 │ │ ┌──────┐                         │   │
 │ │ │ IMAGE│  Title: --text-primary   │   │
 │ │ │      │  Publisher: --text-2nd   │   │
-│ │ └──────┘  Price: --gold-primary   │   │
-│ │  [现货]   Badge: --success-green  │   │
+│ │ └──────┘  Price: --primary (pink) │   │
+│ │  [现货]   Badge: --accent/--mint  │   │
 │ └───────────────────────────────────┘   │
 │                                         │
-│ Bottom Nav: --navy-header bg            │
-│ Active tab: --gold-primary              │
-│ Cart badge: --red-accent                │
+│ Bottom Nav: floating pill, glass bg     │
+│ Active tab: --primary + --primary-light │
+│ Cart badge: --primary with pink glow    │
 └─────────────────────────────────────────┘
 ```
 
@@ -749,62 +759,34 @@ BEM-like with component prefixes:
 
 ### 12.3 CSS Variables (in `main.css`)
 
+> **Note:** Authoritative tokens live in `css/main.css`. See Section 2.1 for the actual v2.0 palette (coral pink + glassmorphism). The v1.0 gold/navy spec below is kept for historical reference only.
+
 ```css
 :root {
-  /* Colors */
-  --gold-primary: #C8962E;
-  --gold-light: #E8D5A3;
-  --gold-dark: #8B6914;
-  --red-accent: #C41E3A;
-  --red-light: #FDE8EC;
-  --navy-header: #1A1F36;
-  --navy-light: #2D3351;
-  --bg-warm: #FAF8F5;
-  --bg-white: #FFFFFF;
-  --text-primary: #1A1A1A;
-  --text-secondary: #6B6B6B;
-  --text-disabled: #B0B0B0;
-  --border-light: #E8E5E0;
-  --success-green: #2E7D32;
-  --success-bg: #E8F5E9;
+  /* ═══ v2.0 Bright Palette (actual — see main.css) ═══ */
+  --primary: #FF6B6B;          --primary-hover: #FF5252;
+  --secondary: #A78BFA;        --accent: #4ECDC4;
+  --bg-gradient: linear-gradient(135deg, #FFF5F5, #F8F6FF, #F0FDFA);
+  --bg-card: rgba(255,255,255,0.72);
+  --glass-bg-strong: rgba(255,255,255,0.85);
+  --text-primary: #2D3748;     --text-secondary: #718096;
   
-  /* Typography */
-  --font-body: 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', sans-serif;
-  --font-display: 'Noto Serif SC', 'SimSun', serif;
-  --text-xs: 14px;
-  --text-sm: 16px;
-  --text-base: 18px;
-  --text-lg: 20px;
-  --text-xl: 24px;
-  --text-2xl: 28px;
-  --text-3xl: 32px;
+  /* Typography (unchanged) */
+  --font-body: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  --text-base: 18px;  --text-lg: 20px;  --text-xl: 24px;  --text-2xl: 28px;
   
-  /* Spacing */
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 16px;
-  --space-lg: 24px;
-  --space-xl: 32px;
-  --space-2xl: 48px;
+  /* Spacing (unchanged) */
+  --space-sm: 8px;  --space-md: 16px;  --space-lg: 24px;  --space-xl: 32px;
   
-  /* UI */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-full: 9999px;
-  --shadow-card: 0 2px 8px rgba(0,0,0,0.06);
-  --shadow-elevated: 0 4px 16px rgba(0,0,0,0.12);
-  --shadow-gold: 0 4px 12px rgba(200,150,46,0.3);
+  /* UI (updated for glassmorphism) */
+  --radius-sm: 12px;  --radius-md: 16px;  --radius-lg: 20px;
+  --shadow-card: 0 2px 16px rgba(0,0,0,0.04);
+  --shadow-btn: 0 4px 14px var(--primary-glow);
+  --shadow-tab: 0 -2px 20px rgba(0,0,0,0.05);
   
-  /* Layout */
-  --nav-top-height: 56px;
-  --nav-bottom-height: 64px;
-  --max-content-width: 1200px;
-  --page-padding: 16px;
-  
-  /* Transition */
-  --transition-fast: 150ms ease;
-  --transition-normal: 250ms ease;
+  /* Layout (unchanged) */
+  --nav-top-height: 56px;  --nav-bottom-height: 72px;
+  --max-content-width: 1200px;  --page-padding: 16px;
 }
 ```
 
@@ -1000,4 +982,123 @@ Admin panel is **functional first, not pretty**. It's a tool for the store owner
 
 ---
 
-*EOF — DESIGN.md v1.0 | Ready for Build*
+## 17. DARK MODE
+
+### 17.1 Design Philosophy
+
+Dark mode uses the same CSS custom properties architecture. A single `[data-theme="dark"]` attribute on `<html>` switches the entire palette. All 100+ color tokens transition smoothly via CSS transitions on the `:root` selector.
+
+**Key principles for dark mode palette:**
+- **Lift saturation slightly** — colors feel flatter on dark backgrounds, so bump them ~5-10%
+- **Reduce contrast** — pure white text (`#FFFFFF`) on pure black (`#000000`) causes eye strain; use off-white (`#E4E4EC`) on deep charcoal (`#0B0E14`)
+- **Softer glass** — reduce frosted glass opacity from 0.72 → 0.05 for subtle cards
+- **Deeper shadows** — shadows on dark need to be nearly black, not white
+- **Stronger glows** — button glows need 35-40% opacity on dark to be visible
+
+### 17.2 Dark Mode Palette
+
+| Token | Light | Dark | Shift |
+|-------|-------|------|-------|
+| `--primary` | `#FF6B6B` | `#FF7B7B` | +6 lightness |
+| `--primary-hover` | `#FF5252` | `#FF9292` | Brighter for contrast |
+| `--primary-light` | `#FFE0E0` | `rgba(255,107,107,0.12)` | Glass badge bg |
+| `--primary-glow` | `rgba(255,107,107,0.25)` | `rgba(255,107,107,0.35)` | Stronger glow |
+| `--secondary` | `#A78BFA` | `#B794F4` | +8 lightness |
+| `--secondary-light` | `#EDE9FE` | `rgba(167,139,250,0.12)` | Glass bg |
+| `--accent` | `#4ECDC4` | `#5EDCD4` | +10 lightness |
+| `--accent-light` | `#D1FAE5` | `rgba(78,205,196,0.12)` | Glass bg |
+| `--bg-primary` | `#FFF5F5` | `#0B0E14` | Deep charcoal-navy |
+| `--bg-gradient` | pink→purple→mint | `#0B0E14 → #121620 → #0D1117` | Subtle dark |
+| `--bg-card` | `rgba(255,255,255,0.72)` | `rgba(255,255,255,0.05)` | Frosted → subtle |
+| `--bg-card-hover` | `rgba(255,255,255,0.88)` | `rgba(255,255,255,0.08)` | |
+| `--bg-glass` | `rgba(255,255,255,0.55)` | `rgba(255,255,255,0.06)` | |
+| `--glass-bg-strong` | `rgba(255,255,255,0.85)` | `rgba(20,22,30,0.9)` | Solid dark for nav |
+| `--text-primary` | `#2D3748` | `#E4E4EC` | Off-white |
+| `--text-secondary` | `#718096` | `#9898B0` | Muted lavender-gray |
+| `--text-disabled` | `#CBD5E0` | `#505066` | |
+| `--border-light` | `rgba(0,0,0,0.06)` | `rgba(255,255,255,0.08)` | |
+| `--border-glass` | `rgba(255,255,255,0.6)` | `rgba(255,255,255,0.08)` | |
+| `--divider` | `rgba(0,0,0,0.05)` | `rgba(255,255,255,0.06)` | |
+| `--shadow-card` | 0 2px 16px rgba(0,0,0,0.04) | `0 2px 16px rgba(0,0,0,0.3)` | Deeper |
+| `--shadow-sm` | 0 2px 12px rgba(255,107,107,0.10) | `0 2px 12px rgba(255,107,107,0.15)` | |
+| `--shadow-md` | 0 4px 20px rgba(167,139,250,0.12) | `0 4px 20px rgba(167,139,250,0.18)` | |
+| `--shadow-btn` | 0 4px 14px rgba(255,107,107,0.25) | `0 4px 16px rgba(255,107,107,0.35)` | |
+| `--shadow-tab` | 0 -2px 20px rgba(0,0,0,0.05) | `0 -2px 24px rgba(0,0,0,0.4)` | |
+
+### 17.3 Aurora Blobs (Dark Mode)
+
+```css
+[data-theme="dark"] #aurora-bg .blob:nth-child(1) {
+  background: rgba(255,107,107,0.15);  /* Muted coral */
+}
+[data-theme="dark"] #aurora-bg .blob:nth-child(2) {
+  background: rgba(167,139,250,0.10);  /* Muted purple */
+}
+[data-theme="dark"] #aurora-bg .blob:nth-child(3) {
+  background: rgba(78,205,196,0.08);   /* Muted teal */
+}
+[data-theme="dark"] #aurora-bg .blob:nth-child(4) {
+  background: rgba(255,217,61,0.06);   /* Muted gold */
+}
+```
+
+### 17.4 Toggle Implementation
+
+**HTML:** Theme toggle button in top nav (`<button id="btn-theme">🌙</button>`)
+
+**JS (`js/modules/theme.js`):**
+```js
+const ThemeToggle = {
+  init() {
+    const saved = Storage.get('theme');
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    this._renderButton();
+    // Listen for system changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!Storage.get('theme')) {
+        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        this._renderButton();
+      }
+    });
+  },
+
+  toggle() {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    Storage.set('theme', next === 'dark' ? 'dark' : 'light');
+    this._renderButton();
+  },
+
+  _renderButton() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const btn = document.getElementById('btn-theme');
+    if (btn) btn.textContent = isDark ? '☀️' : '🌙';
+  },
+};
+```
+
+**CSS transition:**
+```css
+:root {
+  transition: background 0.3s ease, color 0.3s ease;
+}
+```
+
+### 17.5 Implementation Priority
+
+Dark mode toggle is a **Phase 9 (UI Polish)** task. The dark palette is fully spec'd and only requires:
+1. Adding `[data-theme="dark"]` block to `main.css` (~50 lines)
+2. Adding `js/modules/theme.js` (~35 lines)
+3. Adding toggle button to `nav.js` top nav render
+4. Loading `theme.js` before `app.js` in `index.html`
+
+Estimated effort: **30 minutes.**
+
+---
+
+*EOF — DESIGN.md v2.0 | Updated: Bright Coral palette, Dark Mode spec added*

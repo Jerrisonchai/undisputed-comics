@@ -602,6 +602,8 @@ Toggle settings stored in `site_settings` table. UI elements conditionally rende
 | 7 | **Return policy: none initially** | Not needed for MVP. Can add to checkout page later via admin settings. |
 | 8 | **Analytics: Supabase only** | Supabase queries for sales data. No Google Analytics (privacy-first, no cookie banners needed). |
 | 9 | **Mockups for friend review** | After Phase 1 (homepage skeleton + hero + styling), deploy to GitHub Pages so friend can see and approve before continuing. |
+| 10 | **Design pivot: Bright Coral + Aurora Glassmorphism** | Original gold/navy palette replaced by vibrant coral pink (`#FF6B6B`) + purple (`#A78BFA`) + teal (`#4ECDC4`) + aurora blob background + frosted glass cards. Rationale: more energetic, distinctive, memorable brand feel that appeals beyond traditional "gold" luxury. |
+| 11 | **Dark mode toggle (planned)** | CSS custom properties + `[data-theme="dark"]` selector. Toggle persists to localStorage, respects `prefers-color-scheme`. See Section 16 for full palette. |
 
 ---
 
@@ -693,4 +695,123 @@ Toggle settings stored in `site_settings` table. UI elements conditionally rende
 
 ---
 
-*EOF — v1.0 PRD | 47 files | 10 phases | Ready for DESIGN.md*
+## 16. DARK MODE
+
+### 16.1 Toggle Strategy
+
+```
+System preference (prefers-color-scheme) → localStorage override → toggle button
+```
+
+1. **On first visit:** Respect `prefers-color-scheme: dark` media query
+2. **User toggles:** Save preference to localStorage (`uc_theme: 'dark' | 'light'`)
+3. **Toggle button:** Sun/Moon icon in top nav, toggles `[data-theme="dark"]` on `<html>`
+4. **CSS:** All colors are CSS custom properties. `[data-theme="dark"]` overrides the palette.
+
+### 16.2 Dark Mode Palette
+
+| Token | Light (default) | Dark | Notes |
+|-------|-----------------|------|-------|
+| `--primary` | `#FF6B6B` | `#FF7B7B` | Slightly brighter for dark bg contrast |
+| `--primary-hover` | `#FF5252` | `#FF9292` | |
+| `--primary-light` | `#FFE0E0` | `rgba(255,107,107,0.12)` | Glass badge bg |
+| `--primary-glow` | `rgba(255,107,107,0.25)` | `rgba(255,107,107,0.35)` | Stronger glow on dark |
+| `--secondary` | `#A78BFA` | `#B794F4` | Slightly lifted for dark |
+| `--secondary-light` | `#EDE9FE` | `rgba(167,139,250,0.12)` | |
+| `--accent` | `#4ECDC4` | `#5EDCD4` | Brighter teal on dark |
+| `--accent-light` | `#D1FAE5` | `rgba(78,205,196,0.12)` | |
+| `--bg-primary` | `#FFF5F5` | `#0B0E14` | Deep charcoal-navy |
+| `--bg-gradient` | pink→purple→mint | `#0B0E14 → #121620` | Subtle dark gradient |
+| `--bg-card` | `rgba(255,255,255,0.72)` | `rgba(255,255,255,0.05)` | Frosted glass on dark |
+| `--bg-card-hover` | `rgba(255,255,255,0.88)` | `rgba(255,255,255,0.08)` | |
+| `--bg-glass` | `rgba(255,255,255,0.55)` | `rgba(255,255,255,0.06)` | |
+| `--glass-bg-strong` | `rgba(255,255,255,0.85)` | `rgba(20,22,30,0.9)` | Top nav, bottom nav |
+| `--text-primary` | `#2D3748` | `#E4E4EC` | Off-white (not pure white) |
+| `--text-secondary` | `#718096` | `#9898B0` | Muted lavender-gray |
+| `--text-disabled` | `#CBD5E0` | `#505066` | |
+| `--border-light` | `rgba(0,0,0,0.06)` | `rgba(255,255,255,0.08)` | |
+| `--border-glass` | `rgba(255,255,255,0.6)` | `rgba(255,255,255,0.08)` | |
+| `--divider` | `rgba(0,0,0,0.05)` | `rgba(255,255,255,0.06)` | |
+| `--shadow-card` | light pink shadow | `0 2px 16px rgba(0,0,0,0.3)` | Darker, deeper shadows |
+| `--shadow-btn` | coral glow | `0 4px 16px rgba(255,107,107,0.35)` | |
+| `--shadow-tab` | white glow | `0 -2px 24px rgba(0,0,0,0.4)` | |
+
+### 16.3 Implementation
+
+```css
+/* In main.css — default = light */
+:root { /* light palette as shown above */ }
+
+[data-theme="dark"] {
+  --primary: #FF7B7B;
+  --primary-hover: #FF9292;
+  --primary-light: rgba(255,107,107,0.12);
+  --primary-glow: rgba(255,107,107,0.35);
+  --secondary: #B794F4;
+  --secondary-light: rgba(167,139,250,0.12);
+  --accent: #5EDCD4;
+  --accent-light: rgba(78,205,196,0.12);
+  --bg-primary: #0B0E14;
+  --bg-gradient: linear-gradient(135deg, #0B0E14 0%, #121620 50%, #0D1117 100%);
+  --bg-card: rgba(255,255,255,0.05);
+  --bg-card-hover: rgba(255,255,255,0.08);
+  --bg-glass: rgba(255,255,255,0.06);
+  --glass-bg-strong: rgba(20,22,30,0.9);
+  --text-primary: #E4E4EC;
+  --text-secondary: #9898B0;
+  --text-disabled: #505066;
+  --border-light: rgba(255,255,255,0.08);
+  --border-glass: rgba(255,255,255,0.08);
+  --divider: rgba(255,255,255,0.06);
+  --shadow-card: 0 2px 16px rgba(0,0,0,0.3);
+  --shadow-sm: 0 2px 12px rgba(255,107,107,0.15);
+  --shadow-md: 0 4px 20px rgba(167,139,250,0.18);
+  --shadow-btn: 0 4px 16px rgba(255,107,107,0.35);
+  --shadow-tab: 0 -2px 24px rgba(0,0,0,0.4);
+  --glass-bg: rgba(255,255,255,0.06);
+  --glass-blur: blur(20px);
+  --glass-border: 1px solid rgba(255,255,255,0.08);
+}
+```
+
+### 16.4 Toggle Button (JS)
+
+```js
+const ThemeToggle = {
+  init() {
+    const saved = Storage.get('theme');
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    this._renderButton();
+  },
+
+  toggle() {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    Storage.set('theme', next === 'dark' ? 'dark' : 'light');
+    this._renderButton();
+  },
+
+  _renderButton() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const btn = document.getElementById('btn-theme');
+    if (btn) btn.textContent = isDark ? '☀️' : '🌙';
+  },
+};
+```
+
+### 16.5 Aurora Blobs in Dark Mode
+
+Dark mode aurora blobs use deeper, richer tones with reduced opacity:
+- Blob 1: `rgba(255,107,107,0.15)` (muted coral)
+- Blob 2: `rgba(167,139,250,0.10)` (muted purple)
+- Blob 3: `rgba(78,205,196,0.08)` (muted teal)
+- Blob 4: `rgba(255,217,61,0.06)` (muted gold)
+
+---
+
+*EOF — v1.0 PRD | 47 files | 10 phases | Updated: Phase 3 complete, Dark Mode spec added*

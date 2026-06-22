@@ -123,11 +123,13 @@ const AppRouter = {
         break;
 
       case 'cart':
-        main.innerHTML = this._placeholderPage('🛒', '购物车', '购物车功能将在 Phase 3 上线');
+        await PageCart.init();
+        PageCart.bindEvents();
         break;
 
       case 'checkout':
-        main.innerHTML = this._placeholderPage('📋', '结算', '结算功能将在 Phase 3 上线');
+        await PageCheckout.init();
+        PageCheckout.bindEvents();
         break;
 
       case 'login':
