@@ -1,6 +1,6 @@
 /**
  * app.js — Application Shell + Hash Router
- * UndisputedComics (金牌漫画) v1.0
+ * UndisputedComics (金牌漫画) v2.0
  * Initializes app, handles routing, page transitions.
  */
 
@@ -33,11 +33,15 @@ const AppRouter = {
       hash = '#product/' + params.id;
     } else if (route === 'products') {
       const parts = [];
-      if (params.category && params.category !== 'all') parts.push('category=' + params.category);
-      if (params.publisher) parts.push('publisher=' + params.publisher);
+      if (params.category && params.category !== 'all') parts.push('category=' + encodeURIComponent(params.category));
+      if (params.publisher) parts.push('publisher=' + encodeURIComponent(params.publisher));
       if (parts.length) hash = '#products?' + parts.join('&');
-    } else if (route === 'search' && params.q) {
-      hash = '#search?q=' + encodeURIComponent(params.q);
+    } else if (route === 'search') {
+      const parts = [];
+      if (params.q) parts.push('q=' + encodeURIComponent(params.q));
+      if (parts.length) hash = '#search?' + parts.join('&');
+    } else if (route === 'publisher' && params.name) {
+      hash = '#publisher/' + encodeURIComponent(params.name);
     }
 
     window.location.hash = hash;
@@ -48,22 +52,23 @@ const AppRouter = {
    */
   _handleRoute() {
     const hash = window.location.hash.slice(1) || 'home';
-    const [base, ...rest] = hash.split('?');
-    const parts = base.split('/');
+    const [baseQuery, ...rest] = hash.split('?');
+    const parts = baseQuery.split('/');
     const route = parts[0] || 'home';
 
     // Parse query params
     const params = {};
     if (rest.length) {
-      rest[0].split('&').forEach(pair => {
+      rest.join('?').split('&').forEach(pair => {
         const [k, v] = pair.split('=');
         if (k) params[decodeURIComponent(k)] = decodeURIComponent(v || '');
       });
     }
 
-    // Parse path params (e.g., #product/123)
+    // Parse path params (e.g., #product/123, #publisher/tongli)
     if (parts.length > 1) {
       if (route === 'product') params.id = parts[1];
+      if (route === 'publisher') params.name = parts[1];
     }
 
     this._currentRoute = route;
@@ -72,8 +77,8 @@ const AppRouter = {
     // Update nav active state
     Nav.setActive(route);
 
-    // Show/hide bottom nav (hide on checkout, product detail)
-    const hideNavOn = ['checkout', 'login'];
+    // Show/hide bottom nav (hide on product detail, checkout, login)
+    const hideNavOn = ['checkout', 'login', 'product'];
     Nav.toggleBottomNav(!hideNavOn.includes(route));
 
     // Render the appropriate page
@@ -97,11 +102,24 @@ const AppRouter = {
         break;
 
       case 'products':
-        main.innerHTML = this._placeholderPage('📂', '商品分类', '产品列表将在 Phase 2 上线');
+        await PageProducts.init(params.category, params.publisher);
+        PageProducts.bindEvents();
         break;
 
       case 'product':
-        main.innerHTML = this._placeholderPage('📚', '商品详情', `产品 ${params.id || ''} 详情将在 Phase 2 上线`);
+        await PageProductDetail.init(params.id);
+        PageProductDetail.bindEvents();
+        break;
+
+      case 'search':
+        await PageSearch.init(params.q);
+        PageSearch.bindEvents();
+        break;
+
+      case 'publisher':
+        // Route publisher to products page with publisher filter
+        await PageProducts.init(null, params.name);
+        PageProducts.bindEvents();
         break;
 
       case 'cart':
@@ -118,10 +136,6 @@ const AppRouter = {
 
       case 'account':
         main.innerHTML = this._placeholderPage('👤', '我的账户', '账户功能将在 Phase 4 上线');
-        break;
-
-      case 'search':
-        main.innerHTML = this._placeholderPage('🔍', '搜索', '搜索功能将在 Phase 2 上线');
         break;
 
       default:

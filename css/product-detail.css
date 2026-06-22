@@ -1,0 +1,260 @@
+/* ============================================================
+   product-detail.css — Single Product View
+   UndisputedComics (金牌漫画) v2.0
+   Gallery · Info · Quantity · Action Buttons
+   ============================================================ */
+
+/* ═══════ Cover Image Gallery ═══════ */
+.pdp-gallery {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(135deg, #FEE2E2, #EDE9FE, #D1FAE5, #FFF9C4);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pdp-gallery__main {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: var(--space-lg);
+}
+
+.pdp-gallery__placeholder {
+  font-size: 120px;
+  opacity: 0.4;
+  animation: floatIcon 3s var(--spring-slow) infinite;
+}
+
+.pdp-gallery__nav {
+  position: absolute;
+  bottom: var(--space-md);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.pdp-gallery__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: rgba(0,0,0,0.15);
+  transition: all var(--duration-fast) var(--spring-fast);
+}
+
+.pdp-gallery__dot.active {
+  width: 24px;
+  background: var(--primary);
+}
+
+/* ═══════ Product Info Section ═══════ */
+.pdp-info {
+  padding: var(--space-lg) var(--page-padding);
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  margin-top: -20px;
+  position: relative;
+  z-index: 2;
+  box-shadow: var(--shadow-glass);
+  border-top: var(--glass-border);
+}
+
+.pdp-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-sm);
+}
+
+.pdp-title {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.3;
+  margin-bottom: var(--space-xs);
+}
+
+.pdp-title-en {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-md);
+  font-style: italic;
+}
+
+.pdp-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--divider);
+}
+
+.pdp-meta__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pdp-meta__label {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.pdp-meta__value {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.pdp-meta__value.publisher-link {
+  color: var(--secondary);
+  cursor: pointer;
+  transition: color var(--duration-fast);
+}
+.pdp-meta__value.publisher-link:hover {
+  color: var(--secondary-hover);
+  text-decoration: underline;
+}
+
+/* Pricing */
+.pdp-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.pdp-price {
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.pdp-price__original {
+  font-size: var(--text-base);
+  color: var(--text-disabled);
+  text-decoration: line-through;
+}
+
+.pdp-price__save {
+  font-size: var(--text-xs);
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+}
+
+/* Stock */
+.pdp-stock {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.pdp-stock__dot {
+  width: 10px; height: 10px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.pdp-stock__dot.in-stock    { background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+.pdp-stock__dot.limited     { background: #F59E0B; box-shadow: 0 0 8px rgba(245,158,11,0.3); }
+.pdp-stock__dot.pre-order   { background: #3B82F6; box-shadow: 0 0 8px rgba(59,130,246,0.3); }
+.pdp-stock__dot.out-of-stock { background: var(--text-disabled); }
+
+.pdp-stock.in-stock     { color: #047857; }
+.pdp-stock.limited      { color: #B45309; }
+.pdp-stock.pre-order    { color: #1E40AF; }
+.pdp-stock.out-of-stock { color: var(--text-disabled); }
+
+/* Description */
+.pdp-description {
+  margin-bottom: var(--space-lg);
+}
+
+.pdp-section-title {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.pdp-description__text {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+/* Action row — Qty + Add to Cart */
+.pdp-actions {
+  display: flex;
+  gap: var(--space-md);
+  align-items: stretch;
+  margin-bottom: var(--space-md);
+}
+
+.pdp-actions .qty-selector {
+  flex-shrink: 0;
+}
+
+.pdp-actions .btn--primary {
+  flex: 1;
+  font-size: var(--text-lg);
+  border-radius: var(--radius-md);
+}
+
+/* Buy Now button */
+.pdp-buynow {
+  width: 100%;
+  margin-bottom: var(--space-lg);
+}
+
+/* ═══════ Related Products ═══════ */
+.related-section {
+  padding: var(--space-lg) var(--page-padding);
+}
+
+.related-section .scroll-x {
+  padding: var(--space-xs) 0 var(--space-sm);
+}
+
+/* ═══════ Sticky Add Bar (mobile) ═══════ */
+.pdp-sticky-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  padding: var(--space-md) var(--page-padding);
+  padding-bottom: calc(var(--space-md) + env(safe-area-inset-bottom, 0));
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  border-top: var(--glass-border);
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  z-index: 500;
+  box-shadow: var(--shadow-tab);
+}
+
+.pdp-sticky-bar .btn {
+  flex: 1;
+  font-size: var(--text-lg);
+}
+
+/* ═══════ RESPONSIVE ═══════ */
+@media (min-width: 768px) {
+  .pdp-gallery { aspect-ratio: 4 / 3; max-height: 500px; }
+  .pdp-info { max-width: 768px; margin: -20px auto 0; border-radius: var(--radius-xl); }
+  .pdp-sticky-bar { display: none; }
+}

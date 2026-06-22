@@ -94,6 +94,13 @@ const Nav = {
   },
 
   /**
+   * Update cart badge count (public alias)
+   */
+  updateCartBadge() {
+    this._updateCartBadge();
+  },
+
+  /**
    * Update cart badge count
    */
   _updateCartBadge() {
