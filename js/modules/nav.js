@@ -81,7 +81,12 @@ const Nav = {
     bottomNav.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const route = btn.dataset.route;
-        AppRouter.navigate(route);
+        // If clicking 'account' tab and not logged in → go to login
+        if (route === 'account' && !AuthModule.isLoggedIn()) {
+          AppRouter.navigate('login');
+        } else {
+          AppRouter.navigate(route);
+        }
       });
     });
   },

@@ -27,12 +27,12 @@ window.AppConfig = {
   },
 
   // Routes
-  routes: ['home', 'products', 'product', 'search', 'publisher', 'cart', 'account', 'login', 'checkout'],
+  routes: ['home', 'products', 'product', 'search', 'publisher', 'cart', 'account', 'login', 'register', 'checkout'],
   defaultRoute: 'home',
 
   // API endpoints (for Phase 8 email)
   api: {},
 
   // Version bump for cache busting
-  version: '2.1.9',
+  version: '2.2.0',
 };

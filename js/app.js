@@ -13,6 +13,7 @@ const AppRouter = {
    */
   init() {
     ThemeToggle.init();
+    AuthModule.init();
     Nav.init();
 
     // Parse initial hash or default to home
@@ -79,7 +80,7 @@ const AppRouter = {
     Nav.setActive(route);
 
     // Show/hide bottom nav (hide on product detail, checkout, login)
-    const hideNavOn = ['checkout', 'login', 'product'];
+    const hideNavOn = ['checkout', 'login', 'register', 'product'];
     Nav.toggleBottomNav(!hideNavOn.includes(route));
 
     // Render the appropriate page
@@ -134,11 +135,18 @@ const AppRouter = {
         break;
 
       case 'login':
-        main.innerHTML = this._placeholderPage('👤', '登录', '会员系统将在 Phase 4 上线');
+        PageLogin.init();
+        PageLogin.bindEvents();
+        break;
+
+      case 'register':
+        PageRegister.init();
+        PageRegister.bindEvents();
         break;
 
       case 'account':
-        main.innerHTML = this._placeholderPage('👤', '我的账户', '账户功能将在 Phase 4 上线');
+        PageAccount.init();
+        PageAccount.bindEvents();
         break;
 
       default:

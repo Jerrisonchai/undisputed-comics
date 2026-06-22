@@ -22,7 +22,15 @@ const PageCheckout = {
     }
 
     this._step = 1;
-    this._customer = { name: '', phone: '', email: '', notes: '' };
+
+    // Pre-fill customer info if logged in
+    const user = AuthModule.isLoggedIn() ? AuthModule.getUser() : null;
+    this._customer = {
+      name: user?.name || '',
+      phone: user?.phone || '',
+      email: user?.email || '',
+      notes: '',
+    };
 
     main.innerHTML = this._render();
   },
