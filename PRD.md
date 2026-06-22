@@ -2,8 +2,9 @@
 
 > **Product:** Professional e-commerce website for comic book store
 > **Domain:** UndisputedComics / 金牌漫画
-> **Version:** v1.0 — 10-Phase Build
-> **Created:** 2026-06-22 | **Role:** Full PRD — Build & Ship
+> **Version:** v1.1 — 10-Phase Build (Phases 6-9 reordered)
+> **Created:** 2026-06-22 | **Updated:** 2026-06-22 19:00 MYT
+> **Role:** Full PRD — Build & Ship
 
 ---
 
@@ -24,7 +25,24 @@ UndisputedComics (金牌漫画) is a mobile-first e-commerce website for selling
 | Shopee UX cluttered for older users | Simple, large-text, clean design |
 | No loyalty program | Member points + coupons (toggleable) |
 
-### 1.3 Success Criteria
+### 1.3 Brand Manifesto (Core Values)
+
+> *"谢谢还喜欢看漫画的你，感谢你。"*
+>
+> 欢迎询问邮寄详情和查看是否有现货。
+> 旨在为世界各地的书友带来文学气息。
+> 购买您最喜欢的书籍。
+> 让你在阅读时代中体验每个多姿多彩的盛开岁月。
+> 偶尔也有利落悦耳的翻页声。
+>
+> *Aiming to bring literary atmosphere to book lovers everywhere.*
+> *Shop your favorite books.*
+> *Let you experience every colorful blooming moment in the reading garden.*
+> *Occasionally, there is a melodious page-turning sound.*
+
+These words—from the founder's friend and the soul of this business—define everything we build. Every pixel, every interaction, every message must honor the reader, celebrate the book, and preserve the quiet magic of turning pages.
+
+### 1.4 Success Criteria
 
 - [ ] 50+ products listed within 1 week of launch
 - [ ] < 3 second load time on 3G connection
@@ -258,25 +276,7 @@ undisputed-comics/
 - [ ] Order management: list all orders, filter by status, update status (pending→confirmed→shipped→delivered)
 - [ ] Order detail view: customer info, items, total
 
-### Phase 6: Coupons + Discounts
-- [ ] Admin: create coupon (code, type: % or fixed RM, value, min spend, expiry date, usage limit)
-- [ ] Admin: coupon list, active/inactive toggle, delete
-- [ ] Customer: apply coupon at checkout
-- [ ] Coupon validation (expiry, min spend, usage count)
-- [ ] Discount reflected in order total
-- [ ] Feature toggle: Admin can DISABLE entire coupon system
-- [ ] When disabled: coupon UI hidden from checkout, existing coupons preserved in DB
-
-### Phase 7: Member Points System
-- [ ] Earn points on purchase (configurable rate, e.g., 1 point per RM1)
-- [ ] Points displayed in account page
-- [ ] Redeem points at checkout (configurable rate, e.g., 100 points = RM1)
-- [ ] Points history (earn/redeem log)
-- [ ] Admin: configure earn rate, redeem rate, minimum points to redeem
-- [ ] Feature toggle: Admin can DISABLE entire member points system
-- [ ] When disabled: points UI hidden, existing points preserved in DB
-
-### Phase 8: Email Subscriptions + Notifications
+### Phase 6: Email Subscriptions + Notifications
 - [ ] Email signup form (homepage + checkout)
 - [ ] Email stored in Supabase with "subscribed" status
 - [ ] Admin: view subscriber list, export CSV
@@ -286,7 +286,7 @@ undisputed-comics/
 - [ ] Unsubscribe link in every email
 - [ ] Edge function for sending emails (Supabase + Resend free tier: 100 emails/day)
 
-### Phase 9: Copywriting + UI Polish
+### Phase 7: Copywriting + UI Polish
 - [ ] ALL Chinese copy centralized in `data/copywriting.json`
 - [ ] Homepage tagline: audience-tested Chinese copy for comic collectors
 - [ ] Product descriptions: guidelines for admin
@@ -297,6 +297,24 @@ undisputed-comics/
 - [ ] Test on real low-end Android device
 - [ ] Chinese-specific: proper font fallback (Noto Sans SC → Microsoft YaHei → system)
 - [ ] Navigation labels in Chinese, no English
+
+### Phase 8: Coupons + Discounts
+- [ ] Admin: create coupon (code, type: % or fixed RM, value, min spend, expiry date, usage limit)
+- [ ] Admin: coupon list, active/inactive toggle, delete
+- [ ] Customer: apply coupon at checkout
+- [ ] Coupon validation (expiry, min spend, usage count)
+- [ ] Discount reflected in order total
+- [ ] Feature toggle: Admin can DISABLE entire coupon system
+- [ ] When disabled: coupon UI hidden from checkout, existing coupons preserved in DB
+
+### Phase 9: Member Points System
+- [ ] Earn points on purchase (configurable rate, e.g., 1 point per RM1)
+- [ ] Points displayed in account page
+- [ ] Redeem points at checkout (configurable rate, e.g., 100 points = RM1)
+- [ ] Points history (earn/redeem log)
+- [ ] Admin: configure earn rate, redeem rate, minimum points to redeem
+- [ ] Feature toggle: Admin can DISABLE entire member points system
+- [ ] When disabled: points UI hidden, existing points preserved in DB
 
 ### Phase 10: PWA + Mobile APK + Final QC
 - [ ] PWA manifest: installable on Android/iOS
@@ -456,13 +474,16 @@ undisputed-comics/
 | `#product/:id` | Product detail | `js/pages/product-detail.js` |
 | `#cart` | Shopping cart | `js/pages/cart.js` |
 | `#checkout` | Checkout flow | `js/pages/checkout.js` |
-| `#login` | Login/register | `js/pages/login.js` |
+| `#login` | Login page | `js/pages/login.js` |
+| `#register` | Registration page | `js/pages/register.js` |
 | `#account` | My account | `js/pages/account.js` |
-| `#account/orders` | Order history | `js/pages/account.js` |
-| `#account/points` | Points history | `js/pages/account.js` |
 | `#search` | Search results | `js/pages/search.js` |
 | `#search?q=term` | Search query | `js/pages/search.js` |
 | `#publisher/:name` | Publisher page | `js/pages/products.js` |
+| `#about` | About Us (关于我们) | `js/pages/about.js` |
+| `#delivery` | Delivery Details (配送说明) | `js/pages/delivery.js` |
+| `#contact` | Contact Us (联系我们) | `js/pages/contact.js` |
+| `#faq` | FAQ Chatbot (常见问题) | `js/pages/faq.js` |
 
 **Admin Routes** (`admin.html`):
 | Route | Page | File |
@@ -580,10 +601,10 @@ Toggle settings stored in `site_settings` table. UI elements conditionally rende
 | 3 | Cart + Checkout | 4 | 2 days |
 | 4 | Auth System | 4 | 1.5 days |
 | 5 | Admin Panel | 7 | 2 days |
-| 6 | Coupons + Discounts | 3 | 1 day |
-| 7 | Member Points | 3 | 1 day |
-| 8 | Email + Notifications | 3 | 1.5 days |
-| 9 | Copywriting + Polish | 2 | 1 day |
+| 6 | Email + Notifications | 3 | 1.5 days |
+| 7 | Copywriting + Polish | 2 | 1 day |
+| 8 | Coupons + Discounts | 3 | 1 day |
+| 9 | Member Points | 3 | 1 day |
 | 10 | PWA + APK + QC | 4 | 1.5 days |
 | **Total** | | **~47** | **~15 days** |
 
@@ -604,6 +625,8 @@ Toggle settings stored in `site_settings` table. UI elements conditionally rende
 | 9 | **Mockups for friend review** | After Phase 1 (homepage skeleton + hero + styling), deploy to GitHub Pages so friend can see and approve before continuing. |
 | 10 | **Design pivot: Bright Coral + Aurora Glassmorphism** | Original gold/navy palette replaced by vibrant coral pink (`#FF6B6B`) + purple (`#A78BFA`) + teal (`#4ECDC4`) + aurora blob background + frosted glass cards. Rationale: more energetic, distinctive, memorable brand feel that appeals beyond traditional "gold" luxury. |
 | 11 | **Dark mode toggle (planned)** | CSS custom properties + `[data-theme="dark"]` selector. Toggle persists to localStorage, respects `prefers-color-scheme`. See Section 16 for full palette. |
+| 12 | **Brand manifesto added to About page** | Founder's friend poetic quotes define core brand values: gratitude to readers, literary atmosphere, page-turning sound. Bilingual (Chinese + English). See Section 1.3. |
+| 13 | **Phases 6-9 reordered (v2.6.2)** | Email + Copywriting prioritized ahead of Coupons + Points. Coupons and Points deferred — less critical for MVP launch, harder to implement, greater admin burden. New order: 6=Email, 7=Copywriting, 8=Coupons, 9=Points, 10=PWA+APK. |
 
 ---
 
@@ -814,4 +837,5 @@ Dark mode aurora blobs use deeper, richer tones with reduced opacity:
 
 ---
 
-*EOF — v1.0 PRD | 47 files | 10 phases | Updated: Phase 3 complete, Dark Mode spec added*
+*EOF — v1.1 PRD | 47 files | 10 phases | Phases 6-9 reordered: Email→Copywriting→Coupons→Points*
+*Brand manifesto added (Section 1.3). Info pages (about/delivery/contact/faq) added to routing.*
