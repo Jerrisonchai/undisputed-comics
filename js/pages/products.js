@@ -37,17 +37,29 @@ const PageProducts = {
   },
 
   bindEvents() {
-    // Category chip clicks
-    document.querySelectorAll('#product-filters .chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        const catId = chip.dataset.category;
-        this._activeCategory = catId;
-        this._activePublisher = null;
-        this._renderFilters();
-        this._renderGrid();
-        this._scrollToGrid();
+    // Use event delegation on filter container so chips survive re-renders
+    const filterContainer = document.getElementById('product-filters');
+    if (filterContainer) {
+      filterContainer.addEventListener('click', (e) => {
+        const chip = e.target.closest('.chip');
+        if (!chip) return;
+
+        if (chip.dataset.filterPublisher) {
+          // Publisher filter chip
+          this._activePublisher = chip.dataset.filterPublisher;
+          this._activeCategory = 'all';
+          AppRouter.navigate('products', { publisher: this._activePublisher });
+        } else {
+          // Category filter chip
+          const catId = chip.dataset.category || 'all';
+          this._activeCategory = catId;
+          this._activePublisher = null;
+          this._renderFilters();
+          this._renderGrid();
+          this._scrollToGrid();
+        }
       });
-    });
+    }
 
     // Sort change
     const sortEl = document.getElementById('sort-select');
@@ -57,15 +69,6 @@ const PageProducts = {
         this._renderGrid();
       });
     }
-
-    // Publisher filter clicks in publisher section
-    document.querySelectorAll('[data-filter-publisher]').forEach(el => {
-      el.addEventListener('click', () => {
-        this._activePublisher = el.dataset.filterPublisher;
-        this._activeCategory = 'all';
-        AppRouter.navigate('products', { publisher: this._activePublisher });
-      });
-    });
   },
 
   _render() {
