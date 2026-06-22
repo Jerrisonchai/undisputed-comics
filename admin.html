@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>金牌漫画 · Admin</title>
+  <link rel="stylesheet" href="css/admin.css?v=1">
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div id="admin-app">
+    <!-- Auth wall -->
+    <div id="admin-auth-wall">
+      <div class="admin-login">
+        <div class="admin-login__logo">🎯</div>
+        <h1 class="admin-login__title">金牌漫画</h1>
+        <p class="admin-login__subtitle">管理员登录</p>
+        <form id="admin-login-form" class="admin-login__form" novalidate>
+          <div class="form-group">
+            <label class="form-group__label" for="admin-email">邮箱</label>
+            <input class="form-group__input" type="email" id="admin-email" placeholder="admin@example.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label class="form-group__label" for="admin-password">密码</label>
+            <input class="form-group__input" type="password" id="admin-password" placeholder="••••••••" required minlength="6" autocomplete="current-password">
+          </div>
+          <p id="admin-login-error" class="admin-login__error" style="display:none;"></p>
+          <button type="submit" class="btn btn--primary" style="width:100%;">登入控制台</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main admin layout (hidden until authenticated) -->
+    <div id="admin-layout" style="display:none;">
+      <!-- Sidebar -->
+      <aside class="admin-sidebar">
+        <div class="admin-sidebar__brand">
+          <span class="admin-sidebar__logo">🎯</span>
+          <span class="admin-sidebar__name">金牌漫画</span>
+        </div>
+        <nav class="admin-nav">
+          <a class="admin-nav__item active" href="#dashboard" data-route="dashboard">
+            <span class="admin-nav__icon">📊</span> 控制台
+          </a>
+          <a class="admin-nav__item" href="#products" data-route="products">
+            <span class="admin-nav__icon">📚</span> 商品管理
+          </a>
+          <a class="admin-nav__item" href="#orders" data-route="orders">
+            <span class="admin-nav__icon">📦</span> 订单管理
+          </a>
+          <a class="admin-nav__item" href="#settings" data-route="settings">
+            <span class="admin-nav__icon">⚙️</span> 设置
+          </a>
+        </nav>
+        <div class="admin-sidebar__footer">
+          <button class="btn btn--ghost" id="admin-logout" style="width:100%;color:var(--text-secondary);">🚪 退出</button>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main class="admin-main">
+        <!-- Top bar -->
+        <header class="admin-topbar">
+          <button class="admin-topbar__menu" id="admin-menu-toggle">☰</button>
+          <h2 id="admin-page-title" class="admin-topbar__title">控制台</h2>
+          <div class="admin-topbar__user">
+            <span id="admin-user-display">Admin</span>
+          </div>
+        </header>
+
+        <!-- Content area -->
+        <div id="admin-content" class="admin-content"></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/config.js?v=1"></script>
+  <script src="js/lib/utils.js?v=1"></script>
+  <script src="js/lib/api.js?v=16"></script>
+  <script src="js/admin/admin-auth.js?v=1"></script>
+  <script src="js/admin/dashboard.js?v=1"></script>
+  <script src="js/admin/products-manage.js?v=1"></script>
+  <script src="js/admin/orders-manage.js?v=1"></script>
+  <script src="js/admin/settings.js?v=1"></script>
+  <script src="js/admin/admin-app.js?v=1"></script>
+</body>
+</html>

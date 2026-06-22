@@ -19,6 +19,9 @@ create table if not exists profiles (
 
 alter table profiles enable row level security;
 
+-- Add role column for admin access
+ alter table profiles add column if not exists role text not null default 'customer';
+
 create policy "Users can read own profile" on profiles
   for select using (auth.uid() = id);
 
@@ -214,6 +217,66 @@ create policy "Anyone can subscribe" on subscribers
 -- Site settings: public read
 create policy "Settings viewable by everyone" on site_settings
   for select using (true);
+
+-- ============================================================
+-- ADMIN HELPER FUNCTION
+-- ============================================================
+create or replace function is_admin()
+returns boolean as $$
+  select exists (
+    select 1 from profiles
+    where id = auth.uid() and role = 'admin'
+  );
+$$ language sql security definer stable;
+
+-- ============================================================
+-- ADMIN POLICIES (bypass-friendly for is_admin() users)
+-- ============================================================
+
+-- Products: admin full access
+create policy "Admins manage products" on products
+  for all using (is_admin())
+  with check (is_admin());
+
+-- Orders: admin can view and update all
+create policy "Admins view all orders" on orders
+  for select using (is_admin());
+
+create policy "Admins update orders" on orders
+  for update using (is_admin())
+  with check (is_admin());
+
+-- Order items: admin can view all
+create policy "Admins view all order items" on order_items
+  for select using (is_admin());
+
+-- Ratings: admin full access
+create policy "Admins manage ratings" on ratings
+  for all using (is_admin())
+  with check (is_admin());
+
+-- Favorites: admin full access
+create policy "Admins manage favorites" on favorites
+  for all using (is_admin())
+  with check (is_admin());
+
+-- Coupons: admin full access
+create policy "Admins manage coupons" on coupons
+  for all using (is_admin())
+  with check (is_admin());
+
+-- Subscribers: admin can view
+create policy "Admins view subscribers" on subscribers
+  for select using (is_admin());
+
+-- Profiles: admin can view all (for customer management)
+create policy "Admins view all profiles" on profiles
+  for select using (is_admin() or auth.uid() = id);
+
+-- Site settings: admin can write
+create policy "Admins manage settings" on site_settings
+  for all using (is_admin())
+  with check (is_admin());
 
 -- ============================================================
 -- SEED DATA: Products from data/products.json
