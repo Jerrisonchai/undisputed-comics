@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
   <title>金牌漫画 · Admin</title>
-  <link rel="stylesheet" href="css/admin.css?v=6">
+  <link rel="stylesheet" href="css/admin.css?v=7">
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -29,6 +29,7 @@
           <p id="admin-login-error" class="admin-login__error" style="display:none;"></p>
           <button type="submit" class="btn btn--primary" style="width:100%;">登入控制台</button>
         </form>
+        <div class="admin-version">v<span id="admin-version-text">—</span></div>
       </div>
     </div>
 
@@ -78,21 +79,26 @@
 
         <!-- Content area -->
         <div id="admin-content" class="admin-content"></div>
+
+        <!-- Version footer -->
+        <div class="admin-footer">
+          <span>金牌漫画 Admin · v<span id="admin-dash-version">—</span></span>
+        </div>
       </main>
     </div>
   </div>
 
   <!-- Scripts -->
-  <script src="js/config.js?v=6"></script>
-  <script src="js/lib/utils.js?v=6"></script>
+  <script src="js/config.js?v=7"></script>
+  <script src="js/lib/utils.js?v=7"></script>
   <script src="js/lib/api.js?v=17"></script>
-  <script src="js/admin/admin-auth.js?v=6"></script>
-  <script src="js/admin/dashboard.js?v=6"></script>
-  <script src="js/admin/products-manage.js?v=6"></script>
-  <script src="js/admin/orders-manage.js?v=6"></script>
-  <script src="js/admin/media.js?v=6"></script>
-  <script src="js/admin/settings.js?v=6"></script>
-  <script src="js/admin/notifications.js?v=6"></script>
-  <script src="js/admin/admin-app.js?v=6"></script>
+  <script src="js/admin/admin-auth.js?v=7"></script>
+  <script src="js/admin/dashboard.js?v=7"></script>
+  <script src="js/admin/products-manage.js?v=7"></script>
+  <script src="js/admin/orders-manage.js?v=7"></script>
+  <script src="js/admin/media.js?v=7"></script>
+  <script src="js/admin/settings.js?v=7"></script>
+  <script src="js/admin/notifications.js?v=7"></script>
+  <script src="js/admin/admin-app.js?v=7"></script>
 </body>
 </html>

@@ -568,6 +568,23 @@ body {
   }
 }
 
+/* ═══════ Admin Version Footer ═══════ */
+.admin-version {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 11px;
+  color: var(--text-disabled, #9ca3af);
+  letter-spacing: 0.5px;
+}
+.admin-footer {
+  text-align: center;
+  padding: 12px 16px;
+  font-size: 11px;
+  color: var(--text-disabled, #9ca3af);
+  border-top: 1px solid var(--border-light, #e5e7eb);
+  margin-top: auto;
+}
+
 /* ═══════ Admin Notifications (Phase 6) ═══════ */
 .notif-tabs {
   display: flex;

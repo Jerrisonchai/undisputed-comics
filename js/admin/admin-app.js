@@ -6,6 +6,11 @@ const AdminRouter = {
   _currentRoute: 'dashboard',
 
   async init() {
+    // Show version everywhere
+    const ver = (typeof Config !== 'undefined' && Config.version) || '—';
+    const vEls = document.querySelectorAll('#admin-version-text, #admin-dash-version');
+    vEls.forEach(el => { if (el) el.textContent = ver; });
+
     // Check Supabase auth
     const isAdmin = await AdminAuth.checkAuth();
 
