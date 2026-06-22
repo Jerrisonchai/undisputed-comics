@@ -15,7 +15,7 @@ create type points_txn_type as enum ('earn', 'redeem');
 
 -- 3. PRODUCTS TABLE
 create table if not exists products (
-  id          uuid primary key default uuid_generate_v4(),
+  id          text primary key,
   title_zh    text not null,
   title_en    text,
   price       numeric(10,2) not null default 0,
