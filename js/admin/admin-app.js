@@ -25,14 +25,15 @@ const AdminRouter = {
       // Switch to admin layout
       document.getElementById('admin-auth-wall').style.display = 'none';
       document.getElementById('admin-layout').style.display = 'flex';
-    document.getElementById('admin-user-display').textContent =
-      AdminAuth.getUser()?.email?.split('@')[0] || 'Admin';
+      document.getElementById('admin-user-display').textContent =
+        AdminAuth.getUser()?.email?.split('@')[0] || 'Admin';
 
-    // Handle hash routing
-    this._bindSidebar();
-    this._handleHash();
+      // Handle hash routing
+      this._bindSidebar();
+      this._handleHash();
 
-    window.addEventListener('hashchange', () => this._handleHash());
+      window.addEventListener('hashchange', () => this._handleHash());
+    }
   },
 
   _bindLogin() {
