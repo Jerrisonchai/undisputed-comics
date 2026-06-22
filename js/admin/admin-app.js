@@ -7,24 +7,24 @@ const AdminRouter = {
 
   async init() {
     // Show version everywhere
-    const ver = (typeof Config !== 'undefined' && Config.version) || '—';
+    const AppCfg = window.AppConfig || {};
+    const ver = AppCfg.version || '—';
     const vEls = document.querySelectorAll('#admin-version-text, #admin-dash-version');
     vEls.forEach(el => { if (el) el.textContent = ver; });
 
-    // Check Supabase auth
+    // Show login wall IMMEDIATELY, bind submit handler BEFORE auth check
+    // (prevents hanging if Supabase CDN is slow)
+    document.getElementById('admin-auth-wall').style.display = 'flex';
+    document.getElementById('admin-layout').style.display = 'none';
+    this._bindLogin();
+
+    // Check Supabase auth in background
     const isAdmin = await AdminAuth.checkAuth();
 
-    if (!isAdmin) {
-      // Show login form
-      document.getElementById('admin-auth-wall').style.display = 'flex';
-      document.getElementById('admin-layout').style.display = 'none';
-      this._bindLogin();
-      return;
-    }
-
-    // Show admin layout
-    document.getElementById('admin-auth-wall').style.display = 'none';
-    document.getElementById('admin-layout').style.display = 'flex';
+    if (isAdmin) {
+      // Switch to admin layout
+      document.getElementById('admin-auth-wall').style.display = 'none';
+      document.getElementById('admin-layout').style.display = 'flex';
     document.getElementById('admin-user-display').textContent =
       AdminAuth.getUser()?.email?.split('@')[0] || 'Admin';
 
