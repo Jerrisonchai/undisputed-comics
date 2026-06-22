@@ -60,6 +60,16 @@ const PageCheckout = {
   },
 
   /**
+   * Re-render current step (for same-page transitions, since hashchange doesn't fire when hash stays '#checkout')
+   */
+  _reRender() {
+    const main = document.getElementById('main-content');
+    if (!main) return;
+    main.innerHTML = this._render();
+    this.bindEvents();
+  },
+
+  /**
    * Step indicator
    */
   _renderSteps() {
@@ -119,6 +129,11 @@ const PageCheckout = {
   },
 
   _bindStep1() {
+    // Checkout header back button → return to cart
+    document.getElementById('btn-checkout-back')?.addEventListener('click', () => {
+      AppRouter.navigate('cart');
+    });
+
     document.getElementById('btn-back-to-cart')?.addEventListener('click', () => {
       AppRouter.navigate('cart');
     });
@@ -127,7 +142,7 @@ const PageCheckout = {
       if (this._validateStep1()) {
         this._saveStep1();
         this._step = 2;
-        AppRouter.navigate('checkout');
+        this._reRender();
       }
     });
   },
@@ -227,9 +242,15 @@ const PageCheckout = {
   },
 
   _bindStep2() {
+    // Checkout header back button → return to Step 1
+    document.getElementById('btn-checkout-back')?.addEventListener('click', () => {
+      this._step = 1;
+      this._reRender();
+    });
+
     document.getElementById('btn-step2-back')?.addEventListener('click', () => {
       this._step = 1;
-      AppRouter.navigate('checkout');
+      this._reRender();
     });
 
     document.getElementById('btn-step2-confirm')?.addEventListener('click', () => {
@@ -238,11 +259,12 @@ const PageCheckout = {
         this._order = OrdersModule.create(this._customer);
         CartModule.clear();
         Nav.updateCartBadge();
-        AppRouter.navigate('checkout');
       } catch (err) {
         Utils.toast('创建订单失败，请重试', 'error');
         console.error('Order creation failed:', err);
+        this._step = 2;
       }
+      this._reRender();
     });
   },
 
@@ -307,7 +329,7 @@ const PageCheckout = {
       AppRouter.navigate('home');
     });
 
-    // If checkout-header back button exists, go home
+    // Checkout header back button — go home (order already placed)
     document.getElementById('btn-checkout-back')?.addEventListener('click', () => {
       AppRouter.navigate('home');
     });

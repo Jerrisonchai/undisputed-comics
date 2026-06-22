@@ -12,6 +12,7 @@ const AppRouter = {
    * Initialize the app
    */
   init() {
+    ThemeToggle.init();
     Nav.init();
 
     // Parse initial hash or default to home

@@ -38,6 +38,7 @@ const Nav = {
     topNav.innerHTML = `
       <span class="nav-logo">${logo}</span>
       <span class="nav-spacer"></span>
+      <button class="nav-icon" id="btn-theme" aria-label="切换深色模式">🌙</button>
       <button class="nav-icon" id="btn-search" aria-label="搜索">🔍</button>
       <button class="nav-icon" id="btn-cart-top" aria-label="购物车">
         🛒
@@ -45,8 +46,8 @@ const Nav = {
       </button>
     `;
 
-    document.getElementById('btn-search').addEventListener('click', () => {
-      window.AppRouter?.navigate('search');
+    document.getElementById('btn-theme').addEventListener('click', () => {
+      ThemeToggle.toggle();
     });
 
     document.getElementById('btn-cart-top').addEventListener('click', () => {
