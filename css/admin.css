@@ -531,9 +531,11 @@ body {
 @media (max-width: 768px) {
   .admin-sidebar {
     transform: translateX(-100%);
+    pointer-events: none;
   }
   .admin-sidebar.open {
     transform: translateX(0);
+    pointer-events: auto;
   }
   .admin-main {
     margin-left: 0;
