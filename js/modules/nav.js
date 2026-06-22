@@ -47,7 +47,7 @@ const Nav = {
     `;
 
     document.getElementById('btn-home-logo').addEventListener('click', () => {
-      window.AppRouter?.navigate('home');
+      AppRouter.navigate('home');
     });
 
     document.getElementById('btn-theme').addEventListener('click', () => {
@@ -55,11 +55,11 @@ const Nav = {
     });
 
     document.getElementById('btn-search').addEventListener('click', () => {
-      window.AppRouter?.navigate('search');
+      AppRouter.navigate('search');
     });
 
     document.getElementById('btn-cart-top').addEventListener('click', () => {
-      window.AppRouter?.navigate('cart');
+      AppRouter.navigate('cart');
     });
   },
 
@@ -81,7 +81,7 @@ const Nav = {
     bottomNav.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const route = btn.dataset.route;
-        window.AppRouter?.navigate(route);
+        AppRouter.navigate(route);
       });
     });
   },

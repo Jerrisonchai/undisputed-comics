@@ -34,5 +34,5 @@ window.AppConfig = {
   api: {},
 
   // Version bump for cache busting
-  version: '2.1.6',
+  version: '2.1.7',
 };
