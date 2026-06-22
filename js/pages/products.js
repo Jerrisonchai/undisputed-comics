@@ -116,7 +116,7 @@ const PageProducts = {
       <span class="chip-icon">📚</span><span>全部</span>
     </button>`;
 
-    this._categories.forEach(cat => {
+    this._categories.filter(c => c.id !== 'all').forEach(cat => {
       html += `<button class="chip${this._activeCategory === cat.id ? ' active' : ''}"
                     data-category="${cat.id}">
         <span class="chip-icon">${cat.icon}</span><span>${cat.name_zh}</span>

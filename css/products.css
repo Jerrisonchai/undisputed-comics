@@ -97,7 +97,6 @@
 /* ═══════ Filter Chips Row ═══════ */
 .filter-row {
   padding: var(--space-xs) var(--page-padding) var(--space-sm);
-  overflow: hidden;
 }
 
 /* ═══════ Product Grid (Bento 2-col) ═══════ */
