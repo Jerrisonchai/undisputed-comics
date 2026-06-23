@@ -488,9 +488,24 @@ const API = {
   _localProducts() {
     try {
       const data = Storage.get('products_cache');
-      if (data) return data;
+      if (data && Array.isArray(data) && data.length > 0) return data;
     } catch {}
-    // Last resort: static JSON
+    // Last resort: try loading static products.json via fetch
+    console.warn('[API] No cache — trying static products.json fallback');
+    try {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', 'data/products.json?v=' + (window.AppConfig?.version || '1'), false);
+      xhr.send();
+      if (xhr.status === 200) {
+        const json = JSON.parse(xhr.responseText);
+        const products = Array.isArray(json) ? json : (json.products || []);
+        // Cache it so next page load is fast
+        if (products.length > 0) Storage.set('products_cache', products, 30 * 60 * 1000);
+        return products;
+      }
+    } catch (e) {
+      console.warn('[API] Static products.json fallback also failed:', e.message);
+    }
     return [];
   },
 

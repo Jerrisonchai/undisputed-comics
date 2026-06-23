@@ -12,9 +12,14 @@ const AdminAuth = {
    */
   _getClient() {
     if (this._supabase) return this._supabase;
-    if (typeof supabase !== 'undefined') {
-      const config = typeof Config !== 'undefined' ? Config : { SUPABASE_URL: 'https://fdusyudelkhoomakdfel.supabase.co', SUPABASE_PUBLIC_KEY: 'sb_publishable_hMpj6OKgcZno6jUBEm4xSg_lRDVe9Vf' };
-      this._supabase = supabase.createClient(config.SUPABASE_URL, config.SUPABASE_PUBLIC_KEY);
+    const AppCfg = window.AppConfig || {};
+    const supabaseUrl = AppCfg.supabaseUrl || 'https://fdusyudelkhoomakdfel.supabase.co';
+    const supabaseKey = AppCfg.supabaseKey || 'sb_publishable_hMpj6OKgcZno6jUBEm4xSg_lRDVe9Vf';
+    if (typeof supabase !== 'undefined' && typeof supabase.createClient === 'function') {
+      this._supabase = supabase.createClient(supabaseUrl, supabaseKey);
+      console.log('[AdminAuth] Supabase client created');
+    } else {
+      console.error('[AdminAuth] Supabase CDN not loaded — check network/jsdelivr.net access');
     }
     return this._supabase;
   },

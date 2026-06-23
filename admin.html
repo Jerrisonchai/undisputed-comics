@@ -5,9 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
   <title>金牌漫画 · Admin</title>
-  <link rel="stylesheet" href="css/admin.css?v=12">
-  <!-- Supabase CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="css/admin.css?v=25">
+  <!-- Supabase CDN (same explicit path as main site) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <!-- Safety: detect if CDN failed and show friendly message -->
+  <script>
+    if (typeof supabase === 'undefined') {
+      document.addEventListener('DOMContentLoaded', function() {
+        var wall = document.getElementById('admin-auth-wall');
+        if (wall) {
+          wall.innerHTML = '<div style="text-align:center;padding:40px 20px;max-width:400px;margin:0 auto;">' +
+            '<div style="font-size:3rem;margin-bottom:16px;">🔌</div>' +
+            '<h2 style="color:#1a1a2e;margin-bottom:8px;">无法连接服务器</h2>' +
+            '<p style="color:#64748b;margin-bottom:20px;line-height:1.6;">' +
+            'Supabase 未初始化 — 请尝试：</p>' +
+            '<ol style="text-align:left;color:#555;line-height:1.8;margin-bottom:20px;">' +
+            '<li>下拉刷新本页面（强制刷新）</li>' +
+            '<li>切换到 WiFi 或移动数据试试</li>' +
+            '<li>清除浏览器缓存后重新打开</li>' +
+            '<li>检查是否屏蔽了 jsdelivr.net</li>' +
+            '</ol>' +
+            '<button onclick="location.reload(true)" style="background:#3b82f6;color:#fff;border:none;padding:12px 32px;border-radius:8px;font-size:15px;cursor:pointer;">🔄 强制刷新</button>' +
+            '</div>';
+        }
+      });
+    }
+  </script>
 </head>
 <body>
   <div id="admin-app">
@@ -86,19 +109,19 @@
     </div>
   </div>
 
-  <!-- Scripts -->
-  <script src="js/config.js?v=12"></script>
-  <script src="js/lib/utils.js?v=12"></script>
-  <script src="js/lib/storage.js?v=12"></script>
-  <script src="js/lib/api.js?v=17"></script>
-  <script src="js/modules/email.js?v=12"></script>
-  <script src="js/admin/admin-auth.js?v=12"></script>
-  <script src="js/admin/dashboard.js?v=12"></script>
-  <script src="js/admin/products-manage.js?v=12"></script>
-  <script src="js/admin/orders-manage.js?v=12"></script>
-  <script src="js/admin/media.js?v=12"></script>
-  <script src="js/admin/settings.js?v=12"></script>
-  <script src="js/admin/notifications.js?v=12"></script>
-  <script src="js/admin/admin-app.js?v=12"></script>
+  <!-- Scripts (v=25 cache-bust for friend's device) -->
+  <script src="js/config.js?v=25"></script>
+  <script src="js/lib/utils.js?v=25"></script>
+  <script src="js/lib/storage.js?v=25"></script>
+  <script src="js/lib/api.js?v=25"></script>
+  <script src="js/modules/email.js?v=25"></script>
+  <script src="js/admin/admin-auth.js?v=25"></script>
+  <script src="js/admin/dashboard.js?v=25"></script>
+  <script src="js/admin/products-manage.js?v=25"></script>
+  <script src="js/admin/orders-manage.js?v=25"></script>
+  <script src="js/admin/media.js?v=25"></script>
+  <script src="js/admin/settings.js?v=25"></script>
+  <script src="js/admin/notifications.js?v=25"></script>
+  <script src="js/admin/admin-app.js?v=25"></script>
 </body>
 </html>
