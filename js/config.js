@@ -1,4 +1,4 @@
-/**
+﻿/**
  * config.js — App Configuration
  * UndisputedComics (金牌漫画) v1.0
  * Supabase keys loaded here. Feature flags. Site settings fallback.
@@ -34,5 +34,5 @@ window.AppConfig = {
   api: {},
 
   // Version bump for cache busting
-  version: '2.9',
+  version: '2.10',
 };
